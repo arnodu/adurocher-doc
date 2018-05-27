@@ -1,0 +1,36 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}
+	\begin{axis}[	width=6.2cm, height=7cm,
+								axis lines=left, 
+								xtick=\empty,
+								 ytick=\empty,
+	 							restrict y to domain=0:10,
+	 							xmin=0,xmax=10,
+	 							xlabel=$\epsilon$ (\%),
+	 							every axis x label/.style={at={(ticklabel* cs:1.02)},anchor=west},
+	 							ylabel=$\sigma$ (MPa),
+								 ylabel style={rotate=-90},
+	 							every axis y label/.style={at={(ticklabel* cs:1.02)},anchor=south,},
+	 							extra y ticks={5.7,8},
+	 							extra y tick style={grid=major},
+	 							extra y tick labels={$\sigma _e$, $\sigma _r$}
+	 						] 
+	 
+	 	\addplot[mark=none,smooth,color=black,very thick] coordinates {	
+	 				(0,0) (2,5.5) (4,7.5) (6,8) (6.8,7)	
+		 } node[pos=0.505,label={[right,xshift=5]Limite d'élasticité}] {$\bullet$};
+	 	\addplot[mark=none,color=black,style=dashed] {2.90*x} node[above,pos=0.25,sloped] {$E$}; 
+		 \draw (6.8,7) node[label={[right,xshift=0]Rupture}] {$\bullet$};
+ 	\end{axis} 
+\end{tikzpicture}
+\end{document}
