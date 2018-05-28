@@ -1,0 +1,58 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[x={(0.8,-0.3)},z={(0.8,0.5)}]
+
+\node at (-2.5,-2.5,-1.5) (origin) {};
+\path [draw,-{Latex}] (origin.center) -> +(1,0,0);
+\path [draw,-{Latex}] (origin.center) -> +(0,1,0);
+\path [draw,-{Latex}] (origin.center) -> +(0,0,1);
+
+\tikzstyle{point}=[draw,fill,circle]
+\tikzstyle{trajectory}=[draw,dashed]
+\tikzstyle{seg}=[draw,thick]
+\tikzstyle{vel}=[draw,thick,-{Latex[width=0.5em]}]
+\tikzstyle{faded}=[gray!70]
+
+\node at (-2,-2,0) [point,label=below:$n_1$] (n1) {};
+\node at (2,-2,0) [point,label=below:$n_2$] (n2) {};
+\node at (-1,2,-2) [point,label=above:$n_3$] (n3) {};
+\node at (-1,2,2) [point,label=above:$n_4$] (n4) {};
+
+
+\path [seg,faded] (n1.center) -- node [pos=0.25] (n12) {} (n2.center);
+\path [seg,faded] (n3.center) -- node (n34) {} (n4.center);
+
+
+\path [vel] (n1) -- node [left] {$v_1$} +(0.5,1,0);
+\path [vel] (n2) -- node [right] {$v_2$}  +(0.5,1,0);
+\path [vel] (n3) -- node [left] {$v_3$} +(0.5,-1,0);
+\path [vel] (n4) -- node [left] {$v_4$}  +(0.5,-1,0);
+
+\path [vel,faded] (n12.center) -- node [right] {$v_{12}$} +(0.5,1,0);
+\path [vel,faded] (n34.center) -- node [right] {$v_{34}$} +(0.5,-1,0);
+
+
+
+\node [point]  at (0,0,0) [label=left:$n_{new}$] (nnew) {};
+\path [vel] (nnew) -- node [above right] {$v_{new}$}  +(1,0,0);
+\path [trajectory,faded] (n12.center) -- (nnew);
+\path [trajectory,faded] (n34.center) -- (nnew);
+
+\path [draw,faded,thin] (n12.center) -- (n34.center);
+\path [draw,faded] (n12.center)+(0,0.2,0) -- +(-0.2,0.2,0)  -- +(-0.2,0,0);
+\path [draw,faded] (n34.center)+(0,0,-0.2) -- +(0,-0.2,-0.2)  -- +(0,-0.2,0);
+
+\path [seg] (n1) -- (nnew) -- (n2);
+\path [seg] (n3) -- (nnew) -- (n4);
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,33 @@
+\documentclass[11pt,class=article,float=false,crop=false]{standalone}
+\usepackage{Part3_packages}
+
+\title{ Partie 3 }
+\author{Arnaud Durocher}
+
+\begin{document}
+	
+\onlyifstandalone{\maketitle}
+\onlyifstandalone{\tableofcontents}
+\onlyifstandalone{\listoftodos}
+
+
+
+\part{Collisions pour la formation de jonctions.}
+\label{part:collision}
+
+La gestion des collisions est une étape importante de la simulation dans OptiDis qui permet notamment de former les jonctions au sein du réseau de dislocations. L'algorithme de collisions fait partie des opérations topologiques effectuées à la fin de chaque pas de temps, comme le décrit la section \ref{sec:etapes_simulation}, et plus précisément le diagramme \ref{fig:deroulement_simulation}. L'algorithme de collisions modifie la topologie du réseau afin de maintenir une géométrie acceptable du point de vue physique. Par exemple, des nœuds et des segments du réseau de dislocation peuvent être fusionnés lorsqu'ils se rapprochent les uns des autres. 
+
+Le traitement des collisions influe directement sur la fiabilité de la simulation et doit donc être robuste. Le caractère massif des simulations menées nous contraint aussi à considérer l'aspect performance des algorithmes mis en jeux. Le double enjeu est donc de permettre une gestion fiable et rapide de ces collisions. 
+
+En premier lieu, nous définirons les objectifs de l'algorithme de collision, puis nous verrons comment l'implémenter de manière fiable, et enfin nous nous intéresserons à sa performance, notamment dans un environnement parallèle.
+\import{./}{2.1-Definitions}
+\import{./}{2.2-Detection}
+\import{./}{2.3-Gestion}
+\import{./}{2.4-Resultats}
+
+
+
+\bibliographystylecol{plain}
+\bibliographycol{Part3_biblio}
+
+\end{document}

@@ -1,0 +1,39 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{pgfplots}
+\usepackage{filecontents}
+
+\begin{filecontents*}{dislocdata1.csv}
+	x,y
+	-6,6
+	-4,3
+	-2,1.5
+	0,1
+	2,1.5
+	4,3
+	6,6
+\end{filecontents*}
+\begin{filecontents*}{dislocdata2.csv}
+	x,y
+	-6,-6
+	-5,-4
+	-3,-2
+	-1,-1
+	 1,-1
+	 3,-2
+	 5,-4
+	 6,-6
+\end{filecontents*}
+
+
+\begin{document}		
+	\begin{tikzpicture}
+	\begin{axis}[xmin=-7,xmax=7,ymin=-7,ymax=7,axis lines=none]
+	\addplot [color=black, mark=*] table [x=x, y=y, col sep=comma] {dislocdata1.csv};
+	\addplot [color=black, mark=*] table [x=x, y=y, col sep=comma] {dislocdata2.csv};
+	\end{axis}
+	\end{tikzpicture}
+\end{document}

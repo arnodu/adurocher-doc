@@ -1,0 +1,96 @@
+\documentclass[11pt,class=article,float=false,crop=false]{standalone}
+\usepackage{Part3_packages}
+
+\begin{document}
+	
+\section{Les collisions dans la Dynamique des Dislocations}
+
+L'algorithme de gestion de collision à pour objectif de modifier la topologie du réseau afin de respecter les propriétés physiques des dislocations lors de leur intersection. Certaines de ces interactions sont par exemple décrites au chapitre 7 de \citecol{hull2011introduction}. A titre d'exemple, les interaction entre dislocations et boucles d'irradiations dans le fer sont analysées dans \citecol{shi2015comparaison} en se basant sur des résultats de dynamique moléculaire.
+
+\subsection{Objectifs de l'algorithme}
+
+Les collisions interviennent lorsque des dislocations s'intersectent. La figure \ref{fig:collision_frankread} illustre les collisions se déroulant lors de la formation d'une boucle de Frank-Read \citecol{frankread1950} où les lignes de dislocation se rapprochent pour ensuite s'annihiler lorsqu'elles entrent en contact.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includetikz[0.3]{img/collision_exemple_1}
+		\caption{Initial ($t$)}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includetikz[0.3]{img/collision_exemple_2}
+		\caption{Intermédiaire}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includetikz[0.3]{img/collision_exemple_3}
+		\caption{Final ($t+dt$)}
+	\end{subfigure}
+	\caption{Collisions lors du mécanisme de Frank-Read.}
+	\label{fig:collision_frankread}
+\end{figure}
+
+Lors d'une itération de la simulation, les dislocations sont déplacées d'une position initiale au temps $t$ à une position finale au temps $t+dt$. Si les dislocations se déplaçaient en un mouvement continu au cours du pas de temps, plusieurs intersections successives pourraient avoir lieu. Le rôle de l'algorithme de collision est d'effectuer les opérations topologiques permettant d'obtenir la même situation finale que si les dislocations s'étaient déplacées de manière continue en s'intersectant.
+
+\subsection{État de l'art}
+
+Plusieurs types d'algorithmes peuvent être mis en œuvre pour gérer les collisions dans un code de dynamique des dislocations. Les termes utilisés pour décrire les algorithmes de collision proviennent pour la plus part de \citecol{collisionsurvey}. Les algorithmes pour la dynamique des dislocations y sont classés comme des algorithmes de détection de collision n-corps utilisant une géométrie de construction de solides (CSG). Ils peuvent prendre en compte un mouvement statique ou dynamique.
+
+\paragraph{Collisions statiques} 
+
+Le traitement statique des collisions - aussi appelé détection de proximité dans \citecol{sills2016advanced} - revient à détecter et gérer les collisions à un instant donné. On calcule la distance entre chaque objet, et les objets suffisamment proche ($dist < r_{col}$) sont fusionnés. Le déplacement des objets n'est alors pas pris en compte.
+
+Un tel algorithme à pour avantage d'être facile a mettre en œuvre et est peu coûteux en temps de calcul. Les formules impliquées dans calcul des distances entre des objets immobiles sont simples et peu complexes. 
+
+Le défaut de ces algorithmes est leur imprécision lorsque le déplacement des objets est important. Comme il a été remarqué dans \citecol{sills2016advanced}, certaines intersections ne sont pas détectées lorsque le déplacement devient grand par rapport au rayon de capture $r_{col}$. Le pas de temps est donc rapidement limité par l'algorithme de collision : $dt < r_{col}/2v$.
+
+\paragraph{Collisions dynamiques}
+
+Un traitement dynamique des collisions permet de prendre en compte le déplacement des objets lors de la détection des collisions. Pour chaque paire d'objets, on détermine s'ils s'intersectent, mais aussi à quel moment à lieu cette collision.
+
+Les collisions dynamiques permettent de détecter toutes les collisions qui ont lieu quel que soit l'intervalle de temps considéré. Ce type d'algorithme ne limite pas le pas de temps utilisable, mais est plus coûteux en temps de calcul. C'est par exemple le type d'algorithme utilisé par NuMoDis/OptiDis. 
+
+La mise œuvre du traitement des collisions dynamiques est plus délicate que pour la détection de proximité car l'ordre de traitement des collisions est important.  \citecol{sills2016advanced} évoque certains algorithmes pour la gestion des collisions sur une géométrie dynamique.
+
+ 
+
+\subsection{Contributions}
+
+Les sections suivantes présentent mes travaux sur les algorithmes de détection de collisions pour la Dynamique des Dislocations. Les algorithmes présentés par la suite ont été intégrés au Simulateur OptiDis, et ont pour ambition d'être à la fois robustes et rapides dans un contexte de calcul parallèle et distribué.
+
+L'algorithme de collision proposé se décompose en deux phases. Une première phase de détection teste l'intersection pour chaque paire d'objets. Ensuite une phase de traitement des collisions effectue les modifications topologiques liées aux collisions détectées.
+
+L'algorithme de détection n-corps implémenté est capable de gérer une géométrie de construction de solides (CSG) dynamique. L'intersection entre les segments est testée grâce à des formules analytiques qui permettent une évaluation rapide. Des techniques de partition de l'espace sont utilisées pour accélérer les calculs.
+
+Le traitement des collisions est effectué de manière à représenter fidèlement la réalité physique de la Dynamique des Dislocations. Plusieurs algorithmes sont proposés afin de trouver le meilleur compromis entre vitesse d'exécution et robustesse du traitement.
+
+
+%\subsection{Fiabilité de l'algorithme}
+%
+%Pour que les résultats de la simulation soient fiables, la gestion des collisions doit modifier la topologie afin d'éviter les géométries dégénérées source d'instabilités numériques. La figure \ref{fig:instabilite_geometrie} donne deux exemples de géométries problématiques en dynamique des dislocations. Les segments \ref{fig:instabilite_proche} sont trop proches pour calculer précisément les forces; Ceux de \ref{fig:instabilite_angle} forment un angle trop aigu pour calculer la vitesse nodale.
+%
+%\begin{figure}[H]
+%	\centering
+%	\begin{subfigure}[b]{0.49\textwidth}
+%		\centering
+%		\missingfigure{segments proches}
+%		%\includetikz{img/instabilite_segments_proches}
+%		\caption{Segments trop proches}
+%		\label{fig:instabilite_proche}
+%	\end{subfigure}
+%	\begin{subfigure}[b]{0.49\textwidth}
+%		\centering
+%		\missingfigure{angle aigu}
+%		%\includetikz[0.70]{img/discretisation-mixte}
+%		\caption{Angle aigu}
+%		\label{fig:instabilite_angle}
+%	\end{subfigure}
+%	\caption{Géométries sources d'instabilité.}
+%	\label{fig:instabilite_geometrie}
+%\end{figure}
+%
+%Afin d'éviter des situations instables numériquement, les intersections doivent être effectuées à $\epsilon$ près : deux objets séparés d'une distance $\epsilon$ seront fusionnés. Cela revient à modéliser les lignes de dislocation par des tubes qui fusionnent lorsqu'ils s'intersectent, comme le montre la figure \ref{fig:intersect_tube}. 
+
+\end{document}

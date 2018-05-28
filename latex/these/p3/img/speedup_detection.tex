@@ -1,0 +1,45 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}
+
+\begin{axis}[
+	 axis lines=left, 
+	 xtick={1,2,4,8,16},
+	 ytick={2.7,5.2,8.33,14.2,20},
+	 ymin=0, ymax=25,
+	 xmin=0,xmax=20,
+	 xlabel=Nombre de threads,
+	 every axis x label/.style={at={(ticklabel* cs:1.05)},anchor=north},
+	 ylabel=Performance (iter/s),
+	 ylabel style={rotate=-90},
+	 every axis y label/.style={at={(ticklabel* cs:1.02)},anchor=south,},
+	 extra y tick style={grid=major},
+	 ]
+	 
+	 
+	 \addplot[mark=none,smooth,color=black,very thick] coordinates {	
+	 	(1,1/0.370) (2,1/0.190) (4,1/0.120) (8,1/0.070) (16,1/0.050)	
+	 };
+	
+	\draw  [dotted] (1,0) |- node [label={[above,xshift=-2]$\times 1$}] {$\bullet$} (0,2.7);
+	\draw  [dotted] (2,0) |- node [label={[above,xshift=-2]$\times 1.9$}] {$\bullet$} (0,5.2);
+	\draw  [dotted] (4,0) |- node [label={[above,xshift=-2]$\times 3.1$}] {$\bullet$} (0,8.33);
+	\draw  [dotted] (8,0) |- node [label={[above,xshift=-2]$\times 5.3$}] {$\bullet$} (0,14.2);
+	\draw  [dotted] (16,0) |- node [label={[above,xshift=-2]$\times 7.4$}] {$\bullet$} (0,20);
+
+	
+
+ \end{axis} 
+ 
+\end{tikzpicture}
+\end{document}

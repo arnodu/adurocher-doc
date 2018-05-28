@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}
+
+\tikzstyle{point}=[draw,fill,circle]
+\tikzstyle{trajectory}=[draw,dashed]
+\tikzstyle{vel}=[draw,thick,-{Latex[width=0.5em]}]
+
+\node at (0,1) [point,label={$n_1$}] (n1) {};
+\node at (0,-1)[point,label={$n_2$}] (n2) {};
+
+\node at (2,0)[point,label={$n_{new}$}](n3) {};
+\node at (4,0) (n4) {};
+
+\path (n1) [trajectory] -- node (n1n3) {} (n3);
+\path (n2) [trajectory] -- node (n2n3) {} (n3);
+\path (n1) [vel] -- node [above]{$v_1$} (n1n3);
+\path (n2) [vel] -- node [below]{$v_2$} (n2n3);
+
+\path (n3) [trajectory] -- node (n3n4) {} (n4);
+\path (n3) [vel] -- node [below]{$v_{new}$} (n3n4);
+\end{tikzpicture}
+\end{document}

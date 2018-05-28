@@ -1,0 +1,57 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\begin{tikzpicture}
+	\tikzstyle{etape}=[rounded corners,rectangle split,rectangle split parts=2,draw,align=center,text width=5cm]
+	\tikzstyle{arrow}=[>=stealth,->,thick,rounded corners]
+	\tikzstyle{decision} = [diamond, draw, text badly centered,text width=3cm,aspect=1.5]
+	\tikzstyle{wait} = [ellipse, draw, text badly centered,text width=3cm,aspect=1.5]
+
+
+	\node [rounded corners,draw,align=center,text width=2cm,thick] (begin) { \textbf{D\'ebut} };
+
+	\node [below=0.5cm of begin, wait] (s0) {
+			\textbf{Attente d'une collision.}
+	};
+
+	\node [below=0.5cm of s0,decision] (s2) {
+			\textbf{Test de pr\'ec\'edence} 
+	};
+
+  	\node [below=0.5cm of s2,etape] (s3) {
+			\textbf{Operation topologique} 
+			\nodepart{second} 
+			Gestion  topologique de la collision selectionn\'ee.
+	};
+
+	\node [below=0.5cm of s3,etape] (s4) {
+			\textbf{Recalcul} 
+			\nodepart{second} 
+			Calcul des collisions \\ g\'en\'er\'ees par les modifications.
+	};
+
+	\node [left=2cm of s0, rounded corners,draw,align=center,text width=1cm,thick] (end) { \textbf{Fin} };
+	\node [below right=1cm and 4cm of s0] (loop) {};
+
+	\draw [arrow] (begin) -> (s0) ;
+	\draw [arrow] (s0) -> (s2) ;
+	\draw [arrow] (s0) -> node [text width=3cm,above,text badly centered] {Tout le monde attend} (end) ;
+	\draw [arrow] (s2.east) -| node [above, pos=0.25] {Attendre} (loop.north) |- (s0.east);
+	\draw [arrow] (s2) -> node [right] {OK} (s3) ;
+	\draw [arrow] (s3) -> (s4) ;
+
+	\draw [arrow] (s4.south) |- +(0,-0.5cm) -| (loop.north) |- (s0.east);
+
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,56 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\begin{tikzpicture}
+	\tikzstyle{etape}=[rounded corners,rectangle split,rectangle split parts=2,draw,align=center,text width=5cm]
+	\tikzstyle{arrow}=[>=stealth,->,thick,rounded corners]
+	\tikzstyle{decision} = [diamond, draw, text badly centered, inner sep=3pt]
+
+
+	\node [rounded corners,draw,align=center,text width=2cm,thick] (begin) { \textbf{Début} \\ $t=t_0$ };
+
+	\node [below=0.5cm of begin, decision,aspect=2] (s0) {
+			$t < t_0 + dt$ \textbf{?} 
+	};
+
+	\node [below=0.5cm of s0,etape] (s1) {
+			\textbf{Detection de proximité} 
+			\nodepart{second} 
+			Calcul statique des collisions.
+	};
+
+  	\node [below=0.5cm of s1,etape] (s2) {
+			\textbf{Operation topologique} 
+			\nodepart{second} 
+			Fusion des objets proches.
+	};
+
+	\node [below=0.5cm of s2,etape] (s3) {
+			\textbf{Déplacement} 
+			\nodepart{second} 
+			Tous les noeuds sont déplacés au temps $t$.
+	};
+
+	\node [left=1cm of s0, rounded corners,draw,align=center,text width=1cm,thick] (end) { \textbf{Fin} };
+
+	\draw [arrow] (begin) -> (s0) ;
+	\draw [arrow] (s0) -> node [right] {Oui} (s1) ;
+	\draw [arrow] (s0) -> node [above] {Non} (end) ;
+	\draw [arrow] (s1) -> (s2) ;
+	\draw [arrow] (s2) -> (s3) ;
+
+	\draw [arrow] (s3.south) |-  +(4cm,-0.5cm)  |- node [fill=white,pos=0.25] {$t\leftarrow t+dt_{col}$} (s0.east);
+
+
+\end{tikzpicture}
+\end{document}

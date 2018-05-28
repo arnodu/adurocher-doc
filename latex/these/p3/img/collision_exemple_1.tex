@@ -1,0 +1,64 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.misc}
+
+\begin{document}
+\begin{tikzpicture}
+
+
+\tikzstyle{point}=[draw,fill,circle]
+\tikzstyle{trajectory}=[draw,dashed]
+\tikzstyle{seg}=[draw,thick]
+\tikzstyle{vel}=[draw,thick,-{Latex[width=0.5em]}]
+\tikzstyle{faded}=[gray!70]
+
+\node at (-6, 6) [point] (s1_1) {};
+\node at (-4, 5) [point] (s1_2) {};
+\node at (-2, 3) [point] (s1_3) {};
+\node at (-1, 0) [point] (s1_4) {};
+\node at (-2,-3) [point] (s1_5) {};
+\node at (-4,-5) [point] (s1_6) {};
+\node at (-6,-6) [point] (s1_7) {};
+\path [seg] (s1_1) -- (s1_2) -- (s1_3) -- (s1_4) -- (s1_5) -- (s1_6) -- (s1_7);
+
+\node at (6, 6) [point] (s2_1) {};
+\node at (4, 5) [point] (s2_2) {};
+\node at (2, 3) [point] (s2_3) {};
+\node at (1, 0) [point] (s2_4) {};
+\node at (2,-3) [point] (s2_5) {};
+\node at (4,-5) [point] (s2_6) {};
+\node at (6,-6) [point] (s2_7) {};
+\path [seg] (s2_1) -- (s2_2) -- (s2_3) -- (s2_4) -- (s2_5) -- (s2_6) -- (s2_7);
+
+
+%\node at (-2,0) [point,label=below:$n_1$] (n1) {};
+%\node at (2,0) [point,label=below:$n_2$] (n2) {};
+
+%\node at (0,4)[point,label=$n_{3}$](n3) {};
+%\node at (1,2)[point,faded,label=left:$n_{new}$](nnew) {};
+
+%\path [seg] (n1) -- node[draw, cross out] (n12) {} (n2);
+%\node at (-3,4) (s1) {} ;
+%\node at (3,4) (s2)  {};
+%\path  (s1) --node [pos=0.33] (s1n3) {} (n3) -- node  [pos=0.66]  (s2n3) {}  (s2);
+%\path [draw] (s1n3) -- (n3) -- (s2n3);
+
+%\path [vel] (n1) -- node [left] {$v_1$} +(0.5,1);
+%\path [vel] (n2) -- node [left] {$v_2$}  +(0.5,1);
+%\path [vel] (n12.center) -- node [left] {$v_{12}$}  +(0.5,1);
+%\path [vel] (n3) -- node [above right] {$v_3$}  +(0.5,-1);
+%\path [vel,faded] (nnew) -- node [above,black] {$v_{new}$}  +(0.7,0);
+
+%\path [trajectory] (n3) -- (nnew);
+%\path [trajectory] (n12) --  (nnew);
+
+
+\end{tikzpicture}
+\end{document}

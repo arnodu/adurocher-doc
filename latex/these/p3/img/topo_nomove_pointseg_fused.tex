@@ -1,0 +1,46 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.misc}
+
+\begin{document}
+\begin{tikzpicture}
+
+\tikzstyle{point}=[draw,fill,circle]
+\tikzstyle{trajectory}=[draw,dashed]
+\tikzstyle{seg}=[draw,thick]
+\tikzstyle{vel}=[draw,thick,-{Latex[width=0.5em]}]
+\tikzstyle{faded}=[gray!70]
+
+\node at (-2,0) [point,label=below:$n_1$] (n1) {};
+\node at (2,0) [point,label=below:$n_2$] (n2) {};
+
+\node at (0,4)[point,faded](n3) {};
+\node at (1,2)[point,label=left:$n_{new}$](nnew) {};
+
+\path [seg,faded] (n1) -- node[draw, cross out] (n12) {} (n2);
+\path [seg] (n1) -- (nnew) -- (n2);
+\node at (-3,4) (s1) {} ;
+\node at (3,4) (s2)  {};
+\path  (s1) --node [pos=0.33] (s1n3) {} (nnew) -- node  [pos=0.66]  (s2n3) {}  (s2);
+\path [seg] (s1n3) -- (nnew) -- (s2n3);
+
+
+\path [vel] (nnew) -- node [above right] {$v_{new}$}  +(0.7,0);
+\path [vel] (n1) -- node [left] {$v_1$} +(0.5,1);
+\path [vel] (n2) -- node [left] {$v_2$}  +(0.5,1);
+\path [vel,faded] (n3) -- node [above right] {$v_3$}  +(0.5,-1);
+\path [vel,faded] (n12.center) -- node [left] {$v_{12}$}  +(0.5,1);
+
+\path [trajectory,faded] (n3) -- (nnew);
+\path [trajectory,faded] (n12) --  (nnew);
+
+
+\end{tikzpicture}
+\end{document}
