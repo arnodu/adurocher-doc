@@ -1,0 +1,33 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=2,x={(0.7cm,-0.4cm)}, y={(0cm,1cm)}, z={(1cm,0cm)}]
+	\tikzstyle{begindotted}=[dash pattern=on 3pt off 3pt on 3pt off 3pt on 3pt off 3pt on 10000pt]
+
+	\draw  [fill,opacity=0.05] (-2,1,-1) -- (-2,-1,1) -- (2,-1,1) -- (2,1,-1)  -- cycle;
+	\draw  [fill,opacity=0.05] (-2,-1,-1) -- (-2,1,1)  -- (2,1,1) -- (2,-1,-1) -- cycle;
+	\draw  [fill,opacity=0.05] (-2,-1,0) -- (-2,1,0)  -- (2,1,0) -- (2,-1,0) -- cycle;
+	\draw [dashed,opacity=0.5] (-2,0,0) -- (2,0,0);
+
+	\node [circle,draw,fill] (J1) at (-1,0) {};
+	\node [circle,draw,fill] (J2) at (1,0) {};
+ 	
+	\draw [thick] (J1) to [out=90,in=90] (J2);
+	\draw [begindotted,thick] (-2,-1,1) -- (J1);
+	\draw [begindotted,thick] (-2,-1,-1) -- (J1);
+	\draw [begindotted,thick] (-1,1,0) -- (J1);
+
+	\draw [begindotted,thick] (2,1,1) -- (J2);
+	\draw [begindotted,thick] (2,1,-1) -- (J2);
+	\draw [begindotted,thick] (1,-1,0) -- (J2);
+
+
+\end{tikzpicture}
+\end{document}

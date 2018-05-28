@@ -1,0 +1,32 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{bm}
+\usepackage{geometry}
+\usepackage{multibib}
+\usepackage{standalone}
+
+%% Bibliography commands
+\newcites{intro}{Références}
+%% Page setup commands
+\newgeometry{
+	top=2.5cm,
+	bottom=2.5cm,
+	outer=2.5cm,
+	inner=2.5cm,
+	bindingoffset=1cm
+}
+\raggedbottom
+%% Math custom styles commands
+\newcommand{\vect}{\bm}
+\newcommand{\tensor}[1]{ \underline{\underline{#1 } } }        
+
+%% Debug options :
+\overfullrule=2cm %Show overfull hbox
+%\usepackage[disable]{todonotes}
+\usepackage{todonotes}
+\usepackage{hyperref}
+
+% Command to include standalone tiks images with scaling
+\providecommand{\includetikz}[2][1]{\tikzset{every picture/.style={scale=#1}}\includestandalone{#2}}

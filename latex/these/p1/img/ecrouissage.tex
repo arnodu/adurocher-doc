@@ -1,0 +1,44 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=newest}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+
+\begin{document}
+\begin{tikzpicture}	
+	\begin{axis}[
+	axis lines=left, 
+	xtick=\empty,
+	ytick=\empty,
+	restrict y to domain=0:9,
+	xmin=0,xmax=7.5,
+	xlabel=$\epsilon$ (\%),
+	every axis x label/.style={at={(ticklabel* cs:1.02)},anchor=west},
+	ymin=0,ymax=7.5,
+	ylabel=$\sigma$ (MPa),
+	ylabel style={rotate=-90},
+	every axis y label/.style={at={(ticklabel* cs:1.02)},anchor=south,},
+	extra y ticks={6,6.6},
+	extra y tick style={grid=major},
+	extra y tick labels={$\sigma _{e^1}$,$\sigma _{e^2}$}
+	]
+	
+	\draw[blue,thick] (axis cs:0,0) -- (axis cs:2.7,5.4) .. controls (axis cs:2.85,5.7) and (axis cs:3.2,6.05) .. (axis cs:3.4,6.1) --  (axis cs:5.7,6.9)  .. controls (axis cs:5.85,6.95)  and (axis cs:6.05,6.85) ..  (axis cs:6.1,6.7)  -- (axis cs:6.2,6.5);
+	\draw[mark=none,color=black,style=dashed] (axis cs:0,0) -- (axis cs:3.5,7) node[above,pos=0.5,sloped,style=solid] {\circled{1}};
+	
+	\draw[red,thick] (axis cs:1.5,0) -- (axis cs:4.5,6)  .. controls (axis cs:5,6.75) and (axis cs:5,6.6) .. (axis cs:5.1,6.7) --  (axis cs:5.7,6.9)  .. controls (axis cs:5.85,6.95)  and (axis cs:6.05,6.85) ..  (axis cs:6.1,6.7) -- (axis cs:6.2,6.5) ;
+	\draw[mark=none,color=black,style=dashed] (axis cs:1.5,0) -- (axis cs:5,7) node[above,pos=0.5,sloped,style=solid] {\circled{2}};
+
+	
+	
+	\end{axis} 
+
+\end{tikzpicture}
+\end{document}

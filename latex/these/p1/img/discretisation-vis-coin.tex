@@ -1,0 +1,45 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[scale=5]
+	\tikzstyle{begindotted}=[dash pattern=on 3pt off 3pt on 3pt off 3pt on 10000pt]
+	\tikzstyle{physicalnode}=[circle,fill]
+    \tikzstyle{toponode}=[thin,solid,circle,fill=white,draw=black]
+	
+    %node [label=$b_2$,pos=0.4] {\secondburgers}
+ 	
+	\draw [dashed] (-1,0) to [out=80,in=100] 
+				node[pos=0.1,anchor=center] (n0) {}
+				node[pos=0.2] (n1) {}
+				node[pos=0.3] (a) {}
+				node[pos=0.4] (b) {}
+				node[pos=0.5] (c) {}
+				node[pos=0.6] (d) {}
+				node[pos=0.7] (e) {}
+				node[pos=0.8] (nee) {}
+				node[pos=0.9] (ne) {}				 (1,0);
+
+	\node (p0) at (-1.05, 0) {};
+	\node (pe) at (1.05, 0) {};
+
+	\draw [thick,begindotted] (p0.center) |- node [toponode] {}(n0.center);
+	\draw [thick,begindotted] (pe.center) |- node [toponode]{}(ne.center);
+
+	\draw [thick] 	(n0.center) -| node [toponode] {}
+							(n1.center) |- node [toponode] {}
+							(a.center) -| node [toponode] {}
+							(b.center) |- node [toponode] {}
+							(c.north) -| node [toponode] {}
+							(d.center) |- node [toponode] {}
+							(e.center) -| node [toponode] {}
+							(nee.center) |- node [toponode] {}
+							(ne.center);
+
+\end{tikzpicture}
+\end{document}

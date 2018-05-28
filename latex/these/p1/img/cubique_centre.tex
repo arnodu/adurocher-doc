@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[x={(1cm,0cm)}, y={(-0.25cm,-0.35cm)}, z={(0cm,1cm)}]
+	\tikzstyle{atom}=[circle,draw,fill]
+
+	\draw 	   (0,0,0) node[atom]{} 
+		    -- (0,1,0) node[atom]{} 
+			-- (1,1,0) node[atom]{} 
+			-- (1,0,0) node[atom]{} 
+			-- cycle;
+	\draw	   (0,0,1) node[atom]{} 
+			-- (0,1,1) node[atom]{} 
+			-- (1,1,1) node[atom]{} 
+			-- (1,0,1) node[atom]{} 
+			-- cycle;
+	\draw (0,0,0) -- (0,0,1);
+	\draw (1,0,0) -- (1,0,1);
+	\draw (0,1,0) -- (0,1,1);
+	\draw (1,1,0) -- (1,1,1);
+	
+	\draw [dotted] (0,0,0) -- (0.5,0.5,0.5);
+	\draw [dotted] (0,0,1) -- (0.5,0.5,0.5);
+	\draw [dotted] (0,1,0) -- (0.5,0.5,0.5);
+	\draw [dotted] (0,1,1) -- (0.5,0.5,0.5);
+	\draw [dotted] (1,0,0) -- (0.5,0.5,0.5);
+	\draw [dotted] (1,0,1) -- (0.5,0.5,0.5);
+	\draw [dotted] (1,1,0) -- (0.5,0.5,0.5);
+	\draw [dotted] (1,1,1) -- (0.5,0.5,0.5);
+
+	
+	\draw (0.5,0.5,0.5) node[atom]{};
+\end{tikzpicture}
+\end{document}

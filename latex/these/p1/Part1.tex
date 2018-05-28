@@ -1,0 +1,23 @@
+\documentclass[11pt,class=article,float=false,crop=false]{standalone}
+\usepackage{Part1_packages}
+
+\title{ Partie 1 }
+
+\begin{document}
+	
+\onlyifstandalone{\maketitle}
+\onlyifstandalone{\tableofcontents}
+\onlyifstandalone{\listoftodos}
+
+\part{Recherche bibliographique.}
+
+Cette première partie bibliographique est un tour d'horizon du domaine de la simulation de Dynamique des Dislocations. Nous présenterons la Dynamique des Dislocations de manière générale, puis nous exposerons le fonctionnement des simulations de Dynamique des Dislocations en prenant comme exemple le code OptiDis.
+
+\import{./}{1.1-Dynamique_des_Dislocations}
+
+\import{./}{1.2-Simulation_DDD}
+
+\bibliographystylebiblio{plain}
+\bibliographybiblio{Part1_biblio}
+
+\end{document}

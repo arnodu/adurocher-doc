@@ -1,0 +1,59 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[x={(1cm,0cm)}, y={(-0.25cm,-0.35cm)}, z={(0cm,1.8cm)}]
+	\tikzstyle{atom}=[circle,draw,fill=black]	
+
+	\draw 	   (-1   , 0   , 0) node[atom]{} 
+		    -- (-0.5 , 0.87, 0) node[atom]{} 
+			-- ( 0.5 , 0.87, 0) node[atom]{}
+			-- ( 1   , 0   , 0) node[atom]{}
+			-- ( 0.5 ,-0.87, 0) node[atom]{} 
+			-- (-0.5 ,-0.87, 0) node[atom]{}
+			-- cycle;
+	\draw 	   (0,0,0)	node[atom]{};
+	\draw [dotted]	(0,0,0) -- (-1   , 0   , 0);
+	\draw [dotted]	(0,0,0) -- (-0.5 , 0.87, 0);
+	\draw [dotted]	(0,0,0) -- ( 0.5 , 0.87, 0);
+	\draw [dotted]	(0,0,0) -- ( 1   , 0   , 0);
+	\draw [dotted]	(0,0,0) -- ( 0.5 ,-0.87, 0);
+	\draw [dotted]	(0,0,0) -- (-0.5 ,-0.87, 0);
+	
+	\draw [dotted]	(0,0.5,0.5) node[atom]{}
+				--  (-0.43,-0.25,0.5) node[atom]{}
+				--  ( 0.43,-0.25,0.5) node[atom]{}
+				-- cycle;
+				
+	\draw 	   (-1   , 0   , 1) node[atom]{} 
+	-- (-0.5 , 0.87, 1) node[atom]{} 
+	-- ( 0.5 , 0.87, 1) node[atom]{}
+	-- ( 1   , 0   , 1) node[atom]{}
+	-- ( 0.5 ,-0.87, 1) node[atom]{} 
+	-- (-0.5 ,-0.87, 1) node[atom]{}
+	-- cycle;
+	\draw 	   (0,0,1)	node[atom]{};
+	\draw [dotted]	(0,0,1) -- (-1   , 0   , 1);
+	\draw [dotted]	(0,0,1) -- (-0.5 , 0.87, 1);
+	\draw [dotted]	(0,0,1) -- ( 0.5 , 0.87, 1);
+	\draw [dotted]	(0,0,1) -- ( 1   , 0   , 1);
+	\draw [dotted]	(0,0,1) -- ( 0.5 ,-0.87, 1);
+	\draw [dotted]	(0,0,1) -- (-0.5 ,-0.87, 1);
+	
+	\draw [dotted]	(0,0,0) -- (0,0,1);
+	
+	\draw (-1   , 0   , 0) -- (-1   , 0   , 1);
+	\draw (-0.5 , 0.87, 0) -- (-0.5 , 0.87, 1);
+	\draw ( 0.5 , 0.87, 0) -- ( 0.5 , 0.87, 1);
+	\draw ( 1   , 0   , 0) -- ( 1   , 0   , 1);
+	\draw ( 0.5 ,-0.87, 0) -- ( 0.5 ,-0.87, 1);
+	\draw (-0.5 ,-0.87, 0) -- (-0.5 ,-0.87, 1);
+
+
+\end{tikzpicture}
+\end{document}

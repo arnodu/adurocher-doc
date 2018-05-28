@@ -1,0 +1,48 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+\begin{tikzpicture}
+
+	\begin{axis}[
+	 axis lines=left, 
+	 xtick=\empty,
+	 ytick=\empty,
+	 restrict y to domain=0:10,
+	 xmin=0,xmax=8,
+	 xlabel=$\epsilon$ (\%),
+	 every axis x label/.style={at={(ticklabel* cs:1.02)},anchor=west},
+	 ylabel=$\sigma$ (MPa),
+	 ylabel style={rotate=-90},
+	 every axis y label/.style={at={(ticklabel* cs:1.02)},anchor=south,},
+	 extra y ticks={6.4},
+	 extra y tick style={grid=major},
+	 extra y tick labels={$\sigma _e$}
+	 ]
+	 
+	 
+	 \draw[very thick] (axis cs:0,0) -- (axis cs:3,6) .. controls (axis cs:3.5,7) and  (axis cs:7,7.5) ..  (axis cs:7,6.7) node[label={[below,yshift=-4]Rupture}] {$\bullet$};
+	 
+	
+	 \addplot[mark=none,color=black,style=dashed] {2*x-0.5} node[below,pos=0.35,sloped] {$E$};
+	 
+	 \draw [thin] (3.1,10) -- (3.1,-0.2);
+	
+	 \node[label={[yshift=-35]\'Elastique}] at (axis cs:1.5,9) {\circled{1}};
+	 \node[label={[yshift=-35]Plastique}] at (axis cs:5.5,9) {\circled{2}};
+	 
+	 
+	 \end{axis} 
+ 
+\end{tikzpicture}
+\end{document}
+
+

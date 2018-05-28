@@ -1,0 +1,49 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+
+\begin{document}
+\begin{tikzpicture}[scale=1]
+	\tikzstyle{atom}=[fill]
+	\def\r{0.2}
+
+	%Grain gauche
+	\foreach \i in {0,1,2,3,4}
+	{
+		\draw[atom] (0.5,\i) circle (\r);
+		\draw[atom] (1.5,\i) circle (\r);
+		\draw [dotted] (0,\i) -- (2,\i);
+	}
+	\draw [dotted] (0.5,-0.5) -- (0.5,4.5);
+	\draw [dotted] (1.5,-0.5) -- (1.5,4.5);
+
+	%Joint
+	\draw[thick] (2.112,-.5) -- (2.112,4.5) node[midway,fill=white,sloped] {\small{Joint de grain}} ;
+	
+	
+	%Grain droit
+	\foreach \i in {0,1,2,3}
+	{
+		\draw[atom] (2+0.5*1.4,\i*1.4) circle (\r);
+		\draw[atom] (2+1.5*1.4,\i*1.4) circle (\r);
+	}
+	
+	\foreach \i in {0.5,1.5,2.5}
+	{
+		\draw[atom] (2+1*1.4,\i*1.4) circle (\r);
+		\draw [dotted] (2.3,\i*1.4-1.1) -- (4.4,\i*1.4 + 1);
+		\draw [dotted] (2.3,\i*1.4+1.1) -- (4.4,\i*1.4 - 1);
+	}
+	
+	\draw [dotted] (2.3,3*1.4-.4) -- (2.4+0.5*1.4,3*1.4+0.4);
+	\draw [dotted] (2.3,.4) -- (2.4+0.5*1.4,-.4);
+	
+	\draw (1,4.75) node {Grain A};
+	\draw (3.4,4.75) node {Grain B};	
+\end{tikzpicture}
+\end{document}

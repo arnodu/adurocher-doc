@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=newest}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+
+\begin{document}
+\begin{tikzpicture}	
+	\begin{axis}[
+	axis lines=left, 
+	xtick=\empty,
+	ytick=\empty,
+	xscale=0.75,
+	restrict y to domain=0:9,
+	xmin=0,xmax=7.5,
+	xlabel=$\epsilon$ (\%),
+	every axis x label/.style={at={(ticklabel* cs:1.02)},anchor=west},
+	ymin=0,ymax=9.5,
+	ylabel=$\sigma$ (MPa),
+	ylabel style={rotate=-90},
+	every axis y label/.style={at={(ticklabel* cs:1.02)},anchor=south,},
+	extra y tick style={grid=major},
+	]
+	
+		\draw[red,thick] (axis cs:0,0) -- (axis cs:3.5,7)  .. controls (axis cs:4.5,8) and (axis cs:5.7,8) ..  (axis cs:6,7.2) node[above,pos=0.5,style=solid] {Irradié} ;
+		\draw[blue,thick] (axis cs:0,0) -- (axis cs:3,6) .. controls (axis cs:3.5,7) and  (axis cs:7,7.5) ..  (axis cs:7,6.5) node[below,pos=0.6,style=solid] {Non irradié};	
+	
+	\end{axis} 
+
+\end{tikzpicture}
+\end{document}

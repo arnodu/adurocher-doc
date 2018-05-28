@@ -1,0 +1,45 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[x={(1cm,0cm)}, y={(-0.25cm,-0.35cm)}, z={(0cm,1cm)},scale=2]
+	\tikzstyle{atom}=[circle,draw,fill,opacity=0.2]
+	\tikzstyle{shaded}=[opacity=0.2]
+	\tikzstyle{tetraatom}=[circle,draw,fill,opacity=1]
+
+		
+	
+	\draw [fill=gray!50,opacity=0.5] (0,1,1) -- (1,0,1) -- (0,0,0) -- cycle;
+	\draw [fill=gray,opacity=0.5] (0,0,0) -- (1,0,1) -- (1,1,0) -- cycle;
+	\draw [fill=gray!30,fill opacity=0.5] (0,0,0) -- (1,1,0) -- (0,1,1) -- cycle;
+	\draw [fill=gray!10,opacity=0.5] (1,1,0)  -- (1,0,1) -- (0,1,1) -- cycle;
+
+	\draw[shaded]	   (0,0,0) node[tetraatom]{} 
+		    -- (0,1,0) node[atom]{} 
+			-- (1,1,0) node[tetraatom]{} 
+			-- (1,0,0) node[atom]{} 
+			-- cycle;
+	\draw[shaded]	   (0,0,1) node[atom]{} 
+			-- (0,1,1) node[tetraatom]{} 
+			-- (1,1,1) node[atom]{} 
+			-- (1,0,1) node[tetraatom]{} 
+			-- cycle;
+	\draw[shaded] (0,0,0) -- (0,0,1);
+	\draw[shaded] (1,0,0) -- (1,0,1);
+	\draw[shaded] (0,1,0) -- (0,1,1);
+	\draw[shaded] (1,1,0) -- (1,1,1);
+
+	\draw (0,0.5,0.5) node[atom]{};
+	\draw (0.5,0,0.5) node[atom]{};
+	\draw (0.5,0.5,0) node[atom]{};
+	\draw (1,0.5,0.5) node[atom]{};
+	\draw (0.5,1,0.5) node[atom]{};
+	\draw (0.5,0.5,1) node[atom]{};
+
+\end{tikzpicture}
+\end{document}

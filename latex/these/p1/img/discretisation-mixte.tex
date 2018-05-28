@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[scale=5]
+	\tikzstyle{begindotted}=[dash pattern=on 3pt off 3pt on 3pt off 3pt on 10000pt]
+	\tikzstyle{physicalnode}=[circle,fill]
+    \tikzstyle{toponode}=[solid,circle,fill=white,draw=black]
+	
+    %node [label=$b_2$,pos=0.4] {\secondburgers}
+ 	\node (p0) at (-1, 0) {};
+ 	\node (pe) at (1, 0) {};
+ 	
+	\draw [dashed] (p0.center) to [out=80,in=100] node[toponode,pos=0.10] (a) {} node[toponode,pos=0.30] (b) {} node[toponode,pos=0.50] (c) {} node[toponode,pos=0.70] (d) {} node[toponode,pos=0.90] (e) {} (pe.center);
+
+	\draw [thick] (a) -- (b) -- (c) -- (d) -- (e);
+	\draw [thick, begindotted] (p0.east) -- (a);
+	\draw [thick, begindotted] (pe.west) -- (e);
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,39 @@
+% tikz library "arrows" must be included ouside of document environment for non-standalone use
+% workaround in document:
+% \shorthandoff{:}%
+% \usetikzlibrary{arrows}
+% \shorthandon{:}%
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+
+\begin{document}
+	\newcommand\midarrow{\tikz \draw[-stealth,thick] (-1,0) -- +(0.4,0);}
+	\newcommand{\firstburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0,0.4);}
+	\newcommand{\secondburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0);}
+	\newcommand{\thirdburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0.4);}	
+\begin{tikzpicture}	
+	\tikzstyle{begindotted}=[dash pattern=on 3pt off 3pt on 3pt off 3pt on 3pt off 3pt on 10000pt]
+
+	\node [circle,draw,fill] (J1) at (-1,0) {};
+	\node [circle,draw,fill] (J2) at (2,0) {};
+ 	
+	\draw (J1) -- node [label={[yshift=-4]$\xi_3$},pos=0.15,sloped] {\midarrow} node [label=$b_3$,pos=0.75] {\thirdburgers}(J2);
+	\draw [begindotted] (-3,2) to [out=-90,in=-200] node [label={[xshift=-8,yshift=-4]$\xi_1$},pos=0.90,sloped,solid] {\midarrow} node [label=$b_1$,pos=0.65] {\firstburgers} (J1);
+	\draw [begindotted] (-3,-2) to [out=-45,in=-100] node [label={[right,xshift=5,yshift=-4]$\xi_2$},pos=0.90,sloped,solid] {\midarrow}  node [label=$b_2$,pos=0.4] {\secondburgers} (J1);
+
+	\draw [begindotted] (4,2) to [out=-180,in=60]  node [label=$b_1$,pos=0.65] {\firstburgers}  (J2);
+	\draw [begindotted] (4,-2) to [out=120,in=-30] node [label=$b_2$,pos=0.7] {\secondburgers} (J2);
+
+	\draw[-stealth,solid] (-0,-2) -- node[left] {$b_1$}(0,-1.6);
+	\draw[-stealth,solid] (0,-1.6) -- node[above] {$b_2$}(0.4,-1.6);
+	\draw[-stealth,solid] (0,-2) -- node[below right] {$b_3$}(0.4,-1.6);
+
+\end{tikzpicture}
+\end{document}

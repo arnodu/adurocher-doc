@@ -1,0 +1,42 @@
+% tikz library "arrows" must be included ouside of document environment for non-standalone use
+% workaround in document:
+% \shorthandoff{:}%
+% \usetikzlibrary{arrows}
+% \shorthandon{:}%
+
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+
+\begin{document}	
+\begin{tikzpicture}	
+	\tikzstyle{atom}=[fill]
+	\def\r{0.2}
+
+	\foreach \i in {1,2,3,4}
+	{
+		\draw[atom] (\i,1) circle (\r);
+		\draw[atom] (\i,2) circle (\r);
+		\draw [dotted] (0.5,\i) -- (4.5,\i);
+		\draw [dotted] (\i,0.5) -- (\i,2);
+	}
+	
+	\foreach \i in {1,2,3}
+	{
+		\draw[atom] (\i,3) circle (\r);
+		\draw[atom] (\i,4) circle (\r);
+		\draw [dotted] (\i,2) -- (\i,4.5);
+	}
+	
+	\draw[-triangle 45] (2.5,3.5) -- (3.5,3.5);
+	\draw (3.5,2.5) node  {\tiny $\bot$};
+	
+	
+\end{tikzpicture}
+\end{document}

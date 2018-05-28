@@ -1,0 +1,30 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+
+\newcommand\midarrow{\tikz \draw[-stealth,thick] (-1,0) -- +(0.4,0);}
+\newcommand{\firstburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0,0.4);}
+\newcommand{\secondburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0);}
+\newcommand{\thirdburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0.4);}
+
+\begin{tikzpicture}[]
+	\tikzstyle{begindotted}=[thick,dash pattern=on 3pt off 3pt on 3pt off 3pt on 3pt off 3pt on 10000pt]
+
+	\node [circle,draw,fill] (J1) at (-1,0) {};
+	\node [circle,draw,fill] (J2) at (2,0) {};
+ 	
+	\draw [very thick] (J1) -- (J2);
+	\draw [begindotted] (-3,1) to [out=-45,in=-195]  (J1);
+	\draw [begindotted] (-3,-1) to [out=45,in=-165] (J1);
+
+	\draw [begindotted] (4,1) to [out=-135,in=15]   (J2);
+	\draw [begindotted] (4,-1) to [out=135,in=-15]  (J2);
+
+\end{tikzpicture}
+\end{document}

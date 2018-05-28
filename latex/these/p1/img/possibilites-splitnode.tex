@@ -1,0 +1,155 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+
+
+\begin{document}
+
+\newcommand\midarrow{\tikz \draw[-stealth,thick] (-1,0) -- +(0.4,0);}
+\newcommand{\firstburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0,0.4);}
+\newcommand{\secondburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0);}
+\newcommand{\thirdburgers}{\tikz \draw[-stealth,solid] (0,0) -- +(0.4,0.4);}
+
+\providecommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+
+\begin{tikzpicture}[scale=4]
+	\tikzstyle{begindotted}=[dash pattern=on 3pt off 3pt on 3pt off 3pt on 3pt off 3pt on 10000pt]
+	\tikzstyle{physicalnode}=[circle,fill]
+    \tikzstyle{toponode}=[solid,circle,fill=white,draw=black]
+    \tikzstyle{segment}=[thick];
+
+	
+	\node (initial) at (0,0)  { 
+		\begin{tikzpicture}[scale=2]
+			\node (N1) at (-1,-0.7){};
+			\node (N2) at (1,-0.7){};			
+			\draw[dashed] (N1) to [out=80,in=100] 
+			node[pos=0.15,toponode] (P1) {}
+			node[pos=0.35,toponode] (J1) {}
+			node[pos=0.65,toponode] (J2) {}
+			node[pos=0.85,toponode] (P2) {}
+			(N2);
+						
+			\draw[segment] (N1.east) -- (P1) -- (J1) -- (J2) -- (P2) -- (N2.west);			
+		
+			\node (N3) at (-1,0.7){};
+			\node (N4) at (1,0.7){};			
+			\draw [dashed] (N3) to [out=-80,in=-100] 
+			node[pos=0.15,toponode] (P3) {}
+			node[pos=0.35,toponode] (J3) {}
+			node[pos=0.65,toponode] (J4) {}
+			node[pos=0.85,toponode] (P4) {}
+			(N4);
+				
+			\draw[segment] (N3.east) -- (P3) -- (J3) -- (J4) -- (P4) -- (N4.west);
+		\end{tikzpicture} 
+	 };	 
+	 
+	 \node (qm) at (0,-0.25) {\circled{$?$}};
+	 
+	  \node (h_junction) at (-1,-1) { 
+	  	\begin{tikzpicture}[scale=2]
+	  		  	
+	  	\node (N1) at (-1,-0.7){};
+	  	\node (N2) at (1,-0.7){};			
+	  	\path [dashed] (N1) to [out=80,in=100] 
+	  	node[pos=0.15,toponode] (P1) {}
+	  	node[pos=0.35] (J1) {}
+	  	node[pos=0.65] (J2) {}
+	  	node[pos=0.85,toponode] (P2) {}
+	  	(N2);	
+	  	
+	  	\node (N3) at (-1,0.7){};
+	  	\node (N4) at (1,0.7){};			
+	  	\path [dashed] (N3) to [out=-80,in=-100] 
+	  	node[pos=0.15,toponode] (P3) {}
+	  	node[pos=0.35] (J3) {}
+	  	node[pos=0.65] (J4) {}
+	  	node[pos=0.85,toponode] (P4) {}
+	  	(N4);  	
+	  	
+	  	\node [physicalnode] (C1) at (-0.3,0) {};
+	  	\node [physicalnode] (C2) at (0.3,0) {};
+	  	
+	  	\draw[segment] (N3.east) -- (P3) -- (C1) -- (C2) -- (P4) -- (N4.west);
+	  	\draw[segment] (N1.east) -- (P1) -- (C1) -- (C2) -- (P2) -- (N2.west);
+	  	
+	  	\end{tikzpicture} 
+	  };
+	  
+	  \node (point_junction) at (0,-1) { 
+	  	\begin{tikzpicture}[scale=2]
+	  	\node [physicalnode] (C) at (0,0) {};
+	  	
+	  	\node (N1) at (-1,-0.7){};
+	  	\node (N2) at (1,-0.7){};			
+	  	\path [dashed] (N1) to [out=80,in=100] 
+	  	node[pos=0.15,toponode] (P1) {}
+	  	node[pos=0.35,toponode] (J1) {}
+	  	node[pos=0.65,toponode] (J2) {}
+	  	node[pos=0.85,toponode] (P2) {}
+	  	(N2);
+	  	
+	  	\draw[segment] (N1.east) -- (P1) -- (J1) -- (C) -- (J2) -- (P2) -- (N2.west);			
+	  	
+	  	\node (N3) at (-1,0.7){};
+	  	\node (N4) at (1,0.7){};			
+	  	\path [dashed] (N3) to [out=-80,in=-100] 
+	  	node[pos=0.15,toponode] (P3) {}
+	  	node[pos=0.35,toponode] (J3) {}
+	  	node[pos=0.65,toponode] (J4) {}
+	  	node[pos=0.85,toponode] (P4) {}
+	  	(N4);
+	  	
+	  	\draw[segment] (N3.east) -- (P3) -- (J3) -- (C) -- (J4) -- (P4) -- (N4.west);
+	  	\end{tikzpicture} 
+	  };
+	  
+	  \node (v_junction) at (1,-1) { 
+	  	\begin{tikzpicture}[scale=2]
+	  	
+	  	\node [physicalnode] (C1) at (0,-0.1) {};
+	  	\node [physicalnode] (C2) at (0,0.1) {};
+	  	
+	  	\node (N1) at (-1,-0.7){};
+	  	\node (N2) at (1,-0.7){};			
+	  	\path [dashed] (N1) to [out=80,in=100] 
+	  	node[pos=0.15,toponode] (P1) {}
+	  	node[pos=0.35,toponode] (J1) {}
+	  	node[pos=0.65,toponode] (J2) {}
+	  	node[pos=0.85,toponode] (P2) {}
+	  	(N2);
+	  	
+	  	\draw[segment] (N1.east) -- (P1) -- (J1) -- (C1) -- (J2) -- (P2) -- (N2.west);			
+	  	
+	  	\node (N3) at (-1,0.7){};
+	  	\node (N4) at (1,0.7){};			
+	  	\path [dashed] (N3) to [out=-80,in=-100] 
+	  	node[pos=0.15,toponode] (P3) {}
+	  	node[pos=0.35,toponode] (J3) {}
+	  	node[pos=0.65,toponode] (J4) {}
+	  	node[pos=0.85,toponode] (P4) {}
+	  	(N4);
+	  	
+	  	\draw[segment] (N3.east) -- (P3) -- (J3) -- (C2) -- (J4) -- (P4) -- (N4.west);
+	  	
+	  	\draw[segment] (C1) -- (C2);
+	  	
+	  	\end{tikzpicture} 
+	  };
+	 
+	 \draw (-0.5,-0.5) -- (-0.5,-1.5);
+	 \draw (0.5,-0.5) -- (0.5,-1.5);
+	 
+	 \draw [very thick, ->] (qm) -- (point_junction.north);
+	 \draw [very thick, ->] (qm) -- (h_junction.north);
+	 \draw [very thick, ->] (qm) -- (v_junction.north);
+
+\end{tikzpicture}
+\end{document}
