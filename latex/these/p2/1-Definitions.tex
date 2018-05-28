@@ -1,0 +1,129 @@
+\documentclass[11pt,class=article,float=false,crop=false]{standalone}
+\usepackage{Part2_packages}
+
+\begin{document}
+
+\section{Réseau de Dislocations pour la Dynamique des Dislocations}
+
+Les données stockées et utilisées dans la dynamique des dislocations sont en majorité contenues dans le réseau de dislocations. Comme décrit en première partie, les lignes de dislocations sont discrétisées en une multitude de segments de dislocations qui connectent des nœuds. Les algorithmes utilisés dans la dynamique des dislocations utilisent un certain nombre d'informations, qu'elles soient portées par la topologie du réseau, ou par les objets contenus dans ce réseau. Le réseau de dislocation peut être modélisé comme un graphe dont les nœuds et les segments portent des données nécessaires aux algorithmes utilisés.
+
+\subsection{Information portée par le réseau de dislocations}
+
+\subsubsection{Information Topologique}
+
+Les informations topologiques concernent la manière dont les objets sont connectés au sein du réseau de dislocations. Information physique: nœuds multiples qui forment les jonctions. Information de discrétisation: nœuds topologiques utilisés pour discréditer les lignes de dislocations pour la modélisation numérique.
+
+La topologie peut être modélisée par un graphe.
+
+\begin{figure}[H]
+	\missingfigure[]{Topologie du réseau de dislocations}
+	\caption{Topologie du réseau de dislocations}
+\end{figure}
+
+
+La topologie du graphe peut être modifiée par certains algorithmes, comme par exemple lors de la formation de jonctions, ou le remaillage. Ces opérations qui modifient la topologie du réseau de dislocations seront appelées opérations topologiques.
+
+\subsubsection{Information portée par les nœuds et les segments}
+\label{sec:donnees_noeds_segments}
+
+Les nœuds et les segments portent les données physiques liées au réseau de dislocations. Ces données sont stockées dans la structure afin de les faire transiter entre les différents algorithmes, comme le montre la figure \ref{fig:flot_donnees}.
+
+\begin{figure}[H]
+\centering
+\includegraphics{img/etapes-simulation.tex}
+\caption{Flot des données nodales lors de la simulation}
+\label{fig:flot_donnees}
+\end{figure}
+
+\paragraph{Nœuds :}
+Chaque nœud porte les données suivantes:
+\begin{itemize}
+\item $P$ : La position du nœud;
+\item $F$ : Force appliquée sur le nœud;
+\item $V$ : La vitesse de déplacement du nœud...
+\end{itemize}
+ainsi que d'autres données spécifiques à certains algorithmes.
+
+\paragraph{Segments :}
+Les segments portent aussi des données physiques liées à la dynamique des dislocations comme : 
+\begin{itemize}
+\item le système de glissement (vecteur de burgers + plan de glissement);
+\item la force appliquée sur les nœuds finaux...
+\end{itemize}
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.47\textwidth}
+\centering
+\begin{minted}{c++}
+struct Mesh_NodeInfo
+{
+    double x,y,z;
+    double x_old,y_old,z_old;
+    double fx, fy, fz;
+    double vx, vy, vz;
+    bool pinned;
+    Mesh_tag_t tag;
+};
+\end{minted}
+\caption{Nœuds}
+\end{subfigure}
+\begin{subfigure}[b]{0.47\textwidth}
+\centering
+\begin{minted}{c++}
+struct Mesh_SegmentInfo
+{    
+    Mesh_NodeIndex_global n1, n2;
+    GlideSystem gs;
+    double fx_n1, fy_n1, fz_n1;
+    double fx_n2, fy_n2, fz_n2;
+    double fx_far_n1, fy_far_n1, fz_far_n1;
+    double fx_far_n2, fy_far_n2, fz_far_n2;
+};
+\end{minted}
+\caption{Segments}
+\end{subfigure}
+\caption{Données portées par les nœuds/segments telles qu'elles apparaissent dans la structure de données}
+\label{fig:Mesh_ObjectInfo}
+\end{figure}
+
+\subsection{Accès aux données}
+
+Les différents algorithmes accèdent aux données et peuvent les modifier. On distingue deux types d'accès aux données : les parcours et les modifications topologiques.
+
+\subsubsection{Parcours des données}
+
+La plus part des algorithmes de la simulation ont besoin de parcourir et modifier les données portées par nœuds et les segments du réseau de dislocation. Par exemple, la figure \ref{fig:flot_donnees} nous indique que l'algorithme de calcul du déplacement parcourt les nœuds pour lire la vitesse nodale et écrire la nouvelle position.
+
+On distingue 3 types de parcours utilisés dans les algorithmes : 
+\begin{itemize}
+\item Parcours simple des nœuds (Déplacement, ...)
+\item Parcours des nœuds avec segments connectés (Forces, Mobilité, ...)
+\item Parcours des segments avec nœuds connectés (Dispatch des forces des noeuds vers les segments)
+\end{itemize}
+
+Une attention toute particulière doit être portée à la performance de ces parcours dont le schéma d'accès aux données pourra être irrégulier.
+
+\subsubsection{Modifications topologiques}
+
+Certains algorithmes modifient la topologie du réseau de dislocations, comme l'algorithme de formation de jonctions ou de remaillage. Ils doivent avoir la possibilité d'ajouter ou de supprimer des nœuds et des segments.
+
+Il est important que la structure de données reste cohérente lorsque la topologie est modifiée. Par exemple on ne pourra pas supprimer un nœud si des segments y sont connectés.
+
+Le caractère dynamique du réseau de dislocations implique des ajout et des suppressions fréquents d'objets. Il faudra donc gérer les problématiques liées à la fragmentation de la mémoire.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

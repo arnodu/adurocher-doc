@@ -1,0 +1,61 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+
+\begin{document}
+\begin{tikzpicture}
+	\tikzstyle{etape}=[rounded corners,rectangle split,rectangle split parts=2,draw,align=center,text width=4cm]
+	\tikzstyle{arrow}=[>=stealth,->,thick,rounded corners]
+	
+	\node [thick,gray!100] (timestep) {Pas de temps};
+
+	\node [below right=of timestep.north west,etape] (force) {
+			\textbf{Force} 
+			\nodepart{second} 
+			Calcul des forces nodales
+	};
+
+  	\node [below=of force,etape] (mobilite) {
+			\textbf{Mobilit\'e} 
+			\nodepart{second} 
+			Application des lois de Mobilit\'e
+	};
+
+	\node [below=of mobilite,etape] (deplacement) {
+			\textbf{D\'eplacement} 
+			\nodepart{second} 
+			Nouvelle position des noeuds.
+	};
+
+	\node [below=of deplacement,etape] (local) {
+			\textbf{Op\'erations locales} 
+			\nodepart{second} 
+			Collision \\ Splitnode \\ Remesh			
+	};
+
+	\draw [arrow] (force) -> node [right] {$F_t$} (mobilite) ;
+	\draw [arrow]  (mobilite) -> node [right] {$V_t$} (deplacement) ;
+	\draw [arrow]  (deplacement) -> node [right] {$P^\prime$} (local) ;
+	\draw [arrow]  (force.west)  --  +(-1,0)  |-   node [right,pos=0.2] {$F_t$} (local.west) ;
+
+	\node [right=of force,fill,circle] (begin) {};
+
+	\draw [arrow]  (local.south) -- node [right] {$P_{t+1}$} +(0,-1) -- +(5,-1) |- node [right,pos=0.25] {$t++$} (begin);
+
+	\draw[arrow] (begin) -- node [above] {$P_t$} (force);
+	\draw[arrow] (begin) |- node [above,pos=0.75] {$P_t$} (deplacement);
+	\draw[arrow] (begin) |- node [above,pos=0.75] {$P_t$} (local);
+
+	\node [rounded corners,thick,draw=gray!50, fit={(timestep) (force) (mobilite) (deplacement) (local) (begin)}] {};
+
+\end{tikzpicture}
+\end{document}

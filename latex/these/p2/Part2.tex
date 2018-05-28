@@ -1,0 +1,28 @@
+\documentclass[11pt,class=article,float=false,crop=false]{standalone}
+\usepackage{Part2_packages}
+
+\title{ Partie 2 }
+\author{Arnaud Durocher}
+
+\begin{document}
+	
+\onlyifstandalone{\maketitle}
+\onlyifstandalone{\tableofcontents}
+\onlyifstandalone{\listoftodos}
+
+\part{Structure de données pour la Dynamique des Dislocations.}
+
+La manière de stocker les données de la simulation est d'une importance cruciale à la fois pour la validité de la simulation, la flexibilité des algorithmes, et la performance. Le travail effectué ici vise à proposer une structure de données adaptée à la dynamique des dislocations qui permet d'implémenter facilement des algorithmes l'utilisant tout en permettant une flexibilité dans son implémentation afin de pouvoir expérimenter sur la performance.
+
+La structure de données pour la dynamique des dislocations doit répondre à certaines contraintes qui seront présentées en 1ere section. Nous définirons ensuite un type abstrait de données qui permettra de répondre à ces contraintes. Nous verrons ensuite comment implémenter cette interface, notamment dans un environnement parallèle et distribué. Enfin nous étudierons la performance de cette structure de données.
+
+\import{./}{1-Definitions}
+\import{./}{2-TAD}
+\import{./}{3-Implementation}
+\import{./}{4-Perf}
+
+
+\bibliographystyledata{plain}
+\bibliographydata{Part2_biblio}
+
+\end{document}
