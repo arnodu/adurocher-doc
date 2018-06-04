@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+	<grains>
+		<grain tag="0">
+			<material name="Zr" />
+			<global_cs x="0" y="0" z="0" rotation="axes">
+				<plane name="X" h="1" k="-1" i="0" l="0" />
+				<direction name="Y" dh="2" dk="2" di="-4" dl="0" />
+			</global_cs>
+			<blob tag="0" />
+			<linetype name="line" />
+		</grain>
+	</grains>
+</root>
