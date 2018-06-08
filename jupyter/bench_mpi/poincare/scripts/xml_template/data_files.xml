@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<save_dir path_name="res_<NB_PROC>" />
-	<topology path_name="topo_<NB_PROC>.xml" />
+	<save_dir path_name="/tmp/res_<SIZE>" />
+	<topology path_name="topo_<SIZE>.xml" />
 	<microstructure path_name="micro.xml" />
 	<inputdata path_name="donnees.xml" />
 	<graphs>

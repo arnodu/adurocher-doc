@@ -3,7 +3,7 @@
   <force model="IsotropicAnalytical" algorithm="ufmm" nearfield="iso_arsenlis" farfield_frequency="15" />
   <discretization lmin="20" lmax="50" /> 
   <integration   nbSteps="100"    timeStep="0.00025"    class="ForwardEuler" /> 
-  <ForwardEuler  adaptiveTimeStep="off"  dt_max="0.00025"/>
+  <ForwardEuler  adaptiveTimeStep="on"  dt_max="0.00025"/>
   
   <loading mode="strainratedriven">
     <step time="0.0" controlscheme="ConstantStrainRateBulatov"
