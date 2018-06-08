@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-	<save_dir path_name="/tmp/res_<SIZE>" />
+	<save_dir path_name="/tmpdir/optidis_res" />
 	<topology path_name="topo_<SIZE>.xml" />
 	<microstructure path_name="micro.xml" />
 	<inputdata path_name="donnees.xml" />

@@ -32,3 +32,4 @@ cd ..
 #-----------------
 mpirun -np ${nproc} --output-filename stdout_optidis_p${nproc}_s${size}_h${tree_h} --map-by socket:SPAN --report-bindings driver/optidisEXE -h ${tree_h} -f xml_tmp/data_files_${size}.xml
 
+mpirun -np ${nproc} --map-by socket:SPAN rm -rf /tmpdir/optidis_res
