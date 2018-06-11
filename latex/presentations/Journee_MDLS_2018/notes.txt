@@ -1,0 +1,100 @@
+0---------------------------
+Simulation à grande échelle de dynamique des dislocations avec la version parallèle de Numodis
+
+1-----------------------------
+-Contexte : Dislocations et comment les simuler
+-Travaux Améliorer la fiabilité et la performance de la version parallèle de Numodis
+
+2----------------------------
+-La DD est utilisée au CEA pour caractériser le comportement mécanique et le vieillissement des matériaux du nucléaire sous irradiation (ex: Acier de cuve, Zr des assemblages de combustible).
+-Les Dislocations sont des défauts linéiques présents dans les matériaux cristallins (Que l'on peut voir en microscopie électronique en transmission (cf image) ). Elles sont responsables de nombreux comportement des matériaux, par exemple le durcissement par écrouissage ou irradiation (cf figure = essai de traction) , ...
+
+3---------------------------
+Ici une ligne de dislocation interragit avec des boucles d'irradiation qui freinent sa progression, ce qui engendre un durcissement et une fragilisation du matériau.
+
+4---------------------------
+- L'objectif de ma thèse est de permettre d'effectuer des simulations à grande échelle de dynamique des dislocations en utilisant des algorithmes parallèles et distribués capables de s'executer sur des supercalculateurs.
+- On passe de la version sequentielle de Numodis capable de simuler 10 000 segments à la version parallèle et distribuée capable de simuler plusieurs millions de segments. Par exemple la figure de gauche nécéssite plusieurs semaines de calcul pour une boite de 500 nm.
+- L'objectif est d'être capable de simuler un grain complet de manière fiable. Pour cela il faut simuler des domaine 10 à 100 fois plus gros (ordre de la 10aine de microns).
+
+5-------------------------
+Une simulation de dynamique des dislocations se déroule en plusieurs étapes sur lesquelles on itère pour déplacer les dislocations au cours du temps:
+- 0 En début d'itération, on a réseau de dislocations discrétisé avec des noeuds connectés par des segments de dislocations.
+- 1 On calcule des forces d'interaction entre les différents objets
+- 2 On déplace les dislocations
+- 3-4 On effectue des opérations locales comme (3) la formation des jontions (4) le raffinement du maillage
+
+6------------------------
+Les opérations les plus couteuses sont le calcul des forces d'interactions (nous y reviendrons juste après) et les opérations locales comme la formation des jonctions (nous en reparlerons plus tard)
+
+7------------------------
+Pour les calcul des forces d'interaction, la version parallèle de numodis utilise la FMM (methode des multipoles rapides) pour effectuer des approximations de champs lointains et accélérer les calculs. La librairie utilisée est ScalFMM développée par l'équipe hiepacs à l'inria bordeaux.
+
+8-----------------------
+travail effectué
+
+9------------------------
+Le 1er travail accompli au cours de ma thèse concerne la structure de données utilisée pour stocker les informations concernant le réseau de dislocations.
+- Elle contient l'information sur la topologie du réseau (interconnexion entre les noeuds et les segments) et des information sur chacun des objets (ex: position, vitesse des noeuds; vecteur de Burgers des segments ...)
+- La structure de données doit permettre de lire et de modifier le réseau de dislocation de manière simple et efficace. Les defis sont le suivants:
+	- Le réseau de dislocations est très dynamique : la multiplication et l'annihilation des dislocations demandent d'ajouter et de retirer fréquament des noeuds ou des segments.
+	- Les schémas d'accès aux données peuvent parfois être complexes et posent des problèmes de performance. Par exemple, certains algorithmes ont besoin de parcourir les noeuds en accedant aux segments connectés. 
+
+10--------------------
+- Lorsque la quantité de données est trop importante pour un seul ordinateur, on distribue les données sur plusieurs machines qui les traiterons parallèlement. Ici, (cf figure) un réseau de dislocations simple est partagé entre 4 machines. 
+- Le défi est de résoudre les problème liés à la distribution ( quelles données vont où ) et a la cohérence ( toutes les machines doivent être d'accord ) de manière transparente pour l'utilisateur.
+- Pour cela j'ai développé un type abstrait de données qui permet au physicien d'écrire son algorithme sans se préoccuper des problématiques de distribution et de performance que l'informaticien pourra résoudre sans avoir à modifier les algorithmes.
+
+
+11---------------------
+La seconde contribution concerne la formation de jonctions. Lorsque les dislocations entrent en contact, elles forment des jonctions qui jouent un role important dans de nombreux phénomènes, notamment le durcissement par irradiation.
+On distingue 2 etapes dans l'algorithme de formation des jonctions:
+ - La détection des collisions entre segments : un algorithme n-corps ou chaque objet peut entrer en collision avec tous les autres. On a ici une problématique de performances
+ - La gestion des jonctions : il s'agit de traiter les collisions détectées. Ici, la performance est moins critique, mais la fiabilité est importante.
+
+12----------------------
+Première étape : la détection. Pour accélérer les tests d'intersection, on utilise des techniques de hierarchisation de l'espace :
+- Le découpage en grille uniforme de l'espace permet de réduire la complexité du calcul en ne testant la collision qu'entre objets suffisamment proches.
+- La techniques de volumes englobants est utilisée avec des sphères sur les segments : (cf schema) ici, si les sphères qui englobent les segments de disocation ne s'intersectent pas, les segments ne pourront pas entrer en contact. Cela permet de ne tester que des collisions sphères/sphères pour accélérer le calcul
+
+13----------------------
+Deuxième étape: former les jonctions à partir des collisions détectées.
+- Les opérations topologiques de fusion des segments ont été réecrites en utilisant la nouvelle structure de données pour plus de fiabilité.
+- Une nouveauté de cet algorithme est la possibilité de recalculer les collision au fur et à mesure des modifications : Une dislocation pourrait entrer en collision avec une jonction nouvellement formée.
+
+14-------------------
+Résultats
+
+15---------------------
+L'algorithme de collision avec recalcul est plus robuste que son prédécésseur. 
+- Il a été testé sur des cas test avec peu de dislocations (exemple de deux lignes qui entrent en collision).
+- Le recalcul permet de détecter des collisions ratées auparavant (lorsque le pas de temps est grand).
+	Par exemple lorque les dislocations de la figure (a) se rapporchent, on s'attend à avoir le resultat (b)
+	L'algorithme de collision avec recalcul (c) , malgré un leger aspect dents-de-scie donne une topologie correcte
+	Alors que si le recalcul est désactivé (d) la topologie est incorrecte
+
+16---------------------
+J'ai validé la simulation en utilisant des cas tests bien connus, comme par exemple la source de Frank Read. On voit bien la boucle se former.
+(NOTE:la couleur représente la décomposition de domaine)
+
+17--------------------
+J'ai aussi reproduit des résultats de Dynamique moléculaire (super-cran de l'article de 2013 de Serra & Bacon dans le Zr)
+
+18-------------------
+La performance et la validité du calcul a aussi été vérifiée sur des simulations à plus grande échelle.
+Déplacement dans le plan basal de dislocations dans un champ de boucles d'irradiation
+30 000 itérations avec 50 000 segments ont été exécutées en environ 6h
+Pour comparaison l'exemple (~1000 segments) du début de la présentation représente plus d'une semaine de calcul avec la version séquentielle
+
+
+19------------------
+La fiabilité de la version parallèle de Numodis a été améliorée grâce a la mise en place d'une nouvelle structure de données et de nouveaux algorithmes (comme l'algorithme de formation de jonctions). La performance du code a aussi été améliorée grâce à des algorithmes parallèles et hiérarchiques. Ces améliorations nous permettent de simuler des scènes contenant plus de 100 000 objets en un temps raisonnable
+Mes travaux en cours portent sur la validation physique de la simulation en quantifiant la précision, et en validant sur des cas test plus variés et complexes. La performance peut encore être étudiée et améliorée, notamment en expérimentant sur l'implémentation de la structure de données.
+
+
+
+
+
+
+
+

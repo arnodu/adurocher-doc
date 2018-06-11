@@ -1,0 +1,32 @@
+\mode<presentation>
+% Frame title
+\defbeamertemplate*{frametitle}{cea}[1][]
+{    
+    \hspace*{1cm}
+    \begin{beamercolorbox}[ht=1.2cm]{frametitle}	       
+        \ifx\insertframesubtitle\@empty%
+	        {\large\bf\insertframetitle}\\	        
+	        \hspace*{0.5cm} {\small~}
+	    \else
+		    {\large\bf\insertframetitle}\\		    
+		    \hspace*{0.5cm} {\small\it\insertframesubtitle}
+        \fi
+    \end{beamercolorbox}
+}
+
+
+
+\defbeamertemplate*{footline}{cea}
+{
+	\mbox{%
+		\begin{beamercolorbox}[wd=.333333\paperwidth,ht=3ex,dp=2ex,center]{footer}%
+			\insertshorttitle
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.666666\paperwidth,ht=3ex,dp=2ex,right]{footer}%
+			\insertinstitute ~ \textbar ~ \insertshortauthor ~ \textbar ~ \insertshortdate{} ~ \textbar ~ \insertframenumber{} / \inserttotalframenumber \hspace*{5pt}
+		\end{beamercolorbox}}
+}
+
+\mode<all>
+%\ifnum \insertpagenumber>1
+%\fi
