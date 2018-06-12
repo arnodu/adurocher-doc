@@ -20,7 +20,7 @@
 
 \title{Dislocation Dynamics Simulation}
 \subtitle{Large scale simulations with Numodis}
-\date{May 12, 2018}
+\date{June 15, 2018}
 \author[Arnaud Durocher]{Arnaud \textsc{Durocher}}
 \institute[MdlS]{}
 \titlegraphic{\includegraphics[width=7cm]{img/1st_page.png}}
@@ -60,7 +60,7 @@
 	        
 	        	\begin{block}{Studied Effects}
 	        		\begin{itemize}
-	        			\item Material ageing under irradiation
+	        			\item Material aging under irradiation
 	        			\item Hardening, embrittlement, creep, ...
 	        		\end{itemize}
 	        	\end{block}
@@ -361,7 +361,57 @@
 \end{block}
 \end{frame}
 
+\subsubsection{Performance and optimization}
 
+\begin{frame}
+\frametitle{Datastructure for Dislocation Dynamics}
+\framesubtitle{Single Node performance}
+    \centering   		  		
+    \includegraphics[width=\textwidth]{img/bench_mesh_omp}
+\begin{columns}[c]
+    \begin{column}{.48\textwidth}
+       \begin{block}{Test conditions}
+           \begin{itemize}
+               \item 1 Poincare NUMA node (8 Threads)
+               \item Iterating over data-structure ($10^6 Elements$)
+           \end{itemize}
+       \end{block}
+    \end{column}
+    \begin{column}{.48\textwidth}
+        \begin{block}{Results}
+            \begin{itemize}
+                \item Uses resources efficiently
+                \item Less performance for irregular access
+            \end{itemize}
+        \end{block}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Datastructure for Dislocation Dynamics}
+\framesubtitle{MPI scaling}
+\centering   		  		
+\includegraphics[width=\textwidth]{img/bench_mesh_mpi_preview}
+\begin{columns}[c]
+    \begin{column}{.48\textwidth}
+        \begin{block}{Test conditions}
+            \begin{itemize}
+                \item 1 Poincare NUMA node/proc (8 Threads)
+                \item Iteration over data-structure ($10^6 Elements$)
+            \end{itemize}
+        \end{block}
+    \end{column}
+    \begin{column}{.48\textwidth}
+        \begin{block}{Results}
+            \begin{itemize}
+                \item $\approx 90 \%$ efficiency
+                \item Few MPI comms (mostly inbalance)
+            \end{itemize}
+        \end{block}
+    \end{column}
+\end{columns}
+\end{frame}
 
 \subsection{Collision algorithm for junction formation}
 
@@ -455,7 +505,7 @@
 				\item Using new datastructure
 			\end{itemize}
 		\end{block}
-		\begin{block}{Collision recomputation}
+		\begin{block}{Collision re-computation}
 			\begin{itemize}
 				\item Mesh modifications can generate more collisions
 				\item One object can collide into multiple objects in one timestep
@@ -464,6 +514,65 @@
 		\textbf{$\Rightarrow$ More reliable collision handling}
 		
 	\end{column}
+\end{columns}
+\end{frame}
+
+\subsubsection{Validation}
+
+\begin{frame}
+\frametitle{Collision algorithm}
+\framesubtitle{Validation of collision algorithm}
+\vspace*{-1em}
+\begin{columns}[t]
+    \begin{column}{.48\textwidth}
+        \begin{block}{More reliable collision handling}
+            \begin{itemize}
+                \item Complex geometry;
+                \item Multiple collisions.
+            \end{itemize}
+            \centering
+            \textbf{Detect collisions missed before}
+        \end{block}
+        \centering
+        \begin{minipage}{0.30\linewidth}
+            \includegraphics[width=\linewidth]{img/frankread}
+        \end{minipage}~~~~%
+        \begin{minipage}{0.49\linewidth}
+            \includegraphics[width=\linewidth]{img/Initial}
+            
+            
+            \includegraphics[width=\linewidth]{img/expected} 
+        \end{minipage}			
+    \end{column}
+    \begin{column}{.48\textwidth}
+        \begin{block}{Impact of collision re-computation}
+            \centering		
+            \begin{figure}
+                \centering
+                \begin{subfigure}[t]{0.48\textwidth}
+                    \centering
+                    \includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-1}
+                    \caption{Initial (t=0)}
+                \end{subfigure}
+                \begin{subfigure}[t]{0.48\textwidth}
+                    \centering
+                    \includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-2}
+                    \caption{Expected result}
+                \end{subfigure}
+                
+                \begin{subfigure}[t]{0.48\textwidth}
+                    \centering
+                    \includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-3}
+                    \caption{Result with recomputation}
+                \end{subfigure}
+                \begin{subfigure}[t]{0.48\textwidth}
+                    \centering
+                    \includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-4}
+                    \caption{Result without recomputation}
+                \end{subfigure}
+            \end{figure}
+        \end{block}
+    \end{column}
 \end{columns}
 \end{frame}
 
@@ -482,72 +591,13 @@
 
 \subsection{Accuracy}
 
-\subsubsection{Validation of collision algorithm}
-
-\begin{frame}
-\frametitle{Accuracy}
-\framesubtitle{Validation of collision algorithm}
-\vspace*{-1em}
-\begin{columns}[t]
-	\begin{column}{.48\textwidth}
-		\begin{block}{More reliable collision handling}
-			\begin{itemize}
-				\item Complex geometry;
-				\item Multiple collisions.
-			\end{itemize}
-			\centering
-			\textbf{Detect collisions missed before}
-		\end{block}
-		\centering
-		\begin{minipage}{0.30\linewidth}
-			\includegraphics[width=\linewidth]{img/frankread}
-		\end{minipage}~~~~%
-		\begin{minipage}{0.49\linewidth}
-			\includegraphics[width=\linewidth]{img/Initial}
-			
-			
-			\includegraphics[width=\linewidth]{img/expected} 
-		\end{minipage}			
-	\end{column}
-	\begin{column}{.48\textwidth}
-		\begin{block}{Impact of collision recomputation}
-		\centering		
-		\begin{figure}
-			\centering
-			\begin{subfigure}[t]{0.48\textwidth}
-				\centering
-				\includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-1}
-				\caption{Initial (t=0)}
-			\end{subfigure}
-			\begin{subfigure}[t]{0.48\textwidth}
-				\centering
-				\includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-2}
-				\caption{Expected result}
-			\end{subfigure}
-			
-			\begin{subfigure}[t]{0.48\textwidth}
-				\centering
-				\includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-3}
-				\caption{Result with recomputation}
-			\end{subfigure}
-			\begin{subfigure}[t]{0.48\textwidth}
-				\centering
-				\includegraphics[width=0.8\linewidth]{img/res-collision/disloc-plot-4}
-				\caption{Result without recomputation}
-			\end{subfigure}
-		\end{figure}
-		\end{block}
-	\end{column}
-\end{columns}
-\end{frame}
-
 \subsubsection{Full simulation validation}
 
 \begin{frame}
 \frametitle{Accuracy}
 \framesubtitle{Full simulation validation}
 \centering
-\begin{block}{Simulation is validated with known results from the litterature}
+\begin{block}{Simulation is validated with known results from the literature}
 	\begin{figure}
 		\centering
 		\begin{overprint}
@@ -565,7 +615,7 @@
 \frametitle{Accuracy}
 \framesubtitle{Full simulation validation}
 	\centering
-	\begin{block}{Simulation is validated with known results from the litterature}
+	\begin{block}{Simulation is validated with known results from the literature}
 	\begin{figure}
 		\begin{subfigure}{0.49\textwidth}
 			\includegraphics[width=\linewidth]{img/sb_initial.png}
@@ -596,6 +646,57 @@
 \end{overprint}
 \end{frame}
 
+\begin{frame}
+\frametitle{Performance}
+\framesubtitle{Large scale simulations}
+\begin{columns}[c]
+    \begin{column}{.68\textwidth}
+        \includegraphics[width=\linewidth]{img/prismaticglide/prismaticglide-5.png}
+    \end{column}
+    \begin{column}{.28\textwidth}
+        \begin{block}{Simulation conditions}
+            \begin{itemize}
+                \item 1 Poincare Node
+                \item 4 MPI $\times$ 4 Threads
+                \item 50 000 segments
+                \item 30 000 Iterations
+            \end{itemize}
+        \end{block}
+        \begin{block}{Results}
+            \begin{itemize}
+                
+                \item Time : 6H
+            \end{itemize}
+        \end{block}        
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Performance}
+\framesubtitle{MPI Weak scaling}
+\centering
+\includegraphics[width=0.48\textwidth]{img/bench_mpi_weak_times} \includegraphics[width=0.48\textwidth]{img/bench_mpi_weak_eff}
+\begin{columns}[c]
+    \begin{column}{.48\textwidth}
+        \begin{block}{Test conditions}
+            \begin{itemize}
+                \item 1 NUMA node/proc (8 Threads)
+                \item Full simulation ($70 000$ Elements/proc)
+            \end{itemize}
+        \end{block}
+    \end{column}
+    \begin{column}{.48\textwidth}
+        \begin{block}{To improve scalability : }
+            \begin{itemize}
+                \item Change Force computation octree height
+                \item Tweak collision computation performance
+            \end{itemize}
+        \end{block}
+    \end{column}
+\end{columns}
+\end{frame}
+
 
 \section*{Conclusion}
 
@@ -606,7 +707,7 @@
 		\begin{columns}[t]
 			\centering
 		\begin{column}{0.45\linewidth}
-		Improved Realiability
+		Improved reliability
 		\begin{itemize}
 			\item New Abstract datastructure
 			\item More Reliable algorithms (collisions)
@@ -616,7 +717,7 @@
 			Parallel performance
 			\begin{itemize}
 				\item Using MPI + OpenMP parallelism
-				\item Using Hierarchical algrithms						
+				\item Using Hierarchical algorithms						
 			\end{itemize}
 		\end{column}
 		\end{columns}
