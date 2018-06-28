@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+	<materials>
+		<material name="Zr">
+			<forces>
+
+				<force model="IsotropicLineTension">
+					<core_energy name="LineTension" Rext="52000" Rint="10" />
+				</force>
+				<force model="IsotropicAnalytical">
+					<elastic name="IsotropicAnalytic" core_width="3" ltiny="1.e-8"
+						thetac="1.e-3" />
+					<core_energy name="CoreEnergy" Rext="52000" Rint="10"
+						ltcorrection="0.01" />
+				</force>
+				<force model="gausspoint" ngauss="5">
+					<elastic name="IsotropicCai2" core_width="3" />
+					<core_energy name="CoreEnergy" Rext="52000" Rint="10"
+						ltcorrection="0.01" />
+				</force>
+				<force model="AnisotropicLineTension">
+					<core_energy name="LineTension" Rext="52000" Rint="10"
+						method="StrohSVD" lmax="10" />
+				</force>
+			</forces>
+
+			<bravais crystallo="HCP" a="3.233" c="5.147" />
+
+			<lame lambda="53918" mu="25373" />
+
+			<Voigt C11="130100" C33="155900" C44="28200" C12="78600" C13="65700" />
+
+			<mobilitylaws>
+				<tangeantial viscosity="0.003" length="5" />
+				<mobility>
+					<constitutive system="prismatic" h="1" k="0" i="-1" l="0"
+						bh="2" bk="-4" bi="2" bl="0" name="ViscousGlide" B="0.03" />
+				</mobility>
+				<mobility>
+					<constitutive system="basal" h="0" k="0" i="0" l="1"
+						bh="2" bk="-4" bi="2" bl="0" name="ViscousGlide" B="0.044" />
+				</mobility>
+			</mobilitylaws>
+
+		</material>
+	</materials>
+</root>

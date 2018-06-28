@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+	<topology>
+		<bot_left_corner x="-<BOX_MAX>" y="-<BOX_MAX>" z="-<BOX_MAX>" />
+		<upp_right_corner x="+<BOX_MAX>" y="+<BOX_MAX>." z="+<BOX_MAX>" />
+		<pbc x="false" y="false" z="false" />
+		<blobs>
+			<blob tag="0" object="Cuboid" x1="-<BOX_MAX>" y1="-<BOX_MAX>" z1="-<BOX_MAX>"
+				x2="+<BOX_MAX>" y2="+<BOX_MAX>" z2="+<BOX_MAX>" />
+		</blobs>
+	</topology>
+</root>

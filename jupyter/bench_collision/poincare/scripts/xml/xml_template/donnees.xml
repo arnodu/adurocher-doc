@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root> 
+  <force model="IsotropicAnalytical" algorithm="cutoff" nearfield="iso_arsenlis" farfield_frequency="15" />
+  <discretization lmin="20" lmax="50" /> 
+  <integration   nbSteps="1"    timeStep="0.00025"    class="ForwardEuler" /> 
+  <ForwardEuler  adaptiveTimeStep="on"  dt_max="0.00025"/>
+  
+  <loading mode="strainratedriven">
+    <step time="0.0" controlscheme="ConstantStrainRateBulatov"
+	  monitor="XY" maxStress="300." strainrate="-0.015" />
+  </loading> 
+
+  <visualization saving_frequency="1" fileName="Test" format="xmlBinary"></visualization>
+</root>
