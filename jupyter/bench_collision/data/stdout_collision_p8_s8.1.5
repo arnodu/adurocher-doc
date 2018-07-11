@@ -1,0 +1,136 @@
+[poincare012-adm:32391] MCW rank 5 bound to socket 1[core 8[hwt 0]], socket 1[core 9[hwt 0]], socket 1[core 10[hwt 0]], socket 1[core 11[hwt 0]], socket 1[core 12[hwt 0]], socket 1[core 13[hwt 0]], socket 1[core 14[hwt 0]], socket 1[core 15[hwt 0]]: [./././././././.][B/B/B/B/B/B/B/B]
+
+======================================================
+ Loading input files from xml/8/data_files.xml
+------------------------------------------------------
+save_dir's path_name : res/8
+topology's path_name : topo.xml
+microstructure's path_name : micro.xml
+inputdata's path_name : donnees.xml
+material files:
+ - material file #0 :  Zr.xml
+======================================================
+
+======================================================
+ Loading material parameters from the following files 
+------------------------------------------------------
+ * from file:xml/8/Zr.xml
+    -     => material = Zr
+======================================================
+
+======================================================
+ Loading geometric information from xml/8/topo.xml
+------------------------------------------------------
+ AbstractBlob # 0
+====================
+ Xmin = [-40000,-40000,-40000]
+ Xmax = [40000,40000,40000]
+----------------
+ Convexe edges:
+   -Edge #0 defined by [-40000,-40000,-40000,40000,-40000,-40000]
+   -Edge #1 defined by [40000,-40000,-40000,40000,40000,-40000]
+   -Edge #2 defined by [40000,40000,-40000,-40000,40000,-40000]
+   -Edge #3 defined by [-40000,40000,-40000,-40000,-40000,-40000]
+   -Edge #4 defined by [-40000,-40000,-40000,-40000,-40000,40000]
+   -Edge #5 defined by [40000,-40000,-40000,40000,-40000,40000]
+   -Edge #6 defined by [40000,40000,-40000,40000,40000,40000]
+   -Edge #7 defined by [-40000,40000,-40000,-40000,40000,40000]
+   -Edge #8 defined by [-40000,-40000,40000,40000,-40000,40000]
+   -Edge #9 defined by [40000,-40000,40000,40000,40000,40000]
+   -Edge #10 defined by [40000,40000,40000,-40000,40000,40000]
+   -Edge #11 defined by [-40000,40000,40000,-40000,-40000,40000]
+----------------
+ Concave edges:
+--------------------
+ Outershell facets:
+   -Facet # 0: OrientedPlane : Equation: 0 x + 0 y + -1 z = 40000
+     +Point [0](-40000	-40000	-40000)0
+     +Point [3](-40000	40000	-40000)0
+     +Point [2](40000	40000	-40000)0
+     +Point [1](40000	-40000	-40000)0
+     +Point [0](-40000	-40000	-40000)0
+   -Facet # 1: OrientedPlane : Equation: 0 x + 0 y + 1 z = 40000
+     +Point [4](-40000	-40000	40000)0
+     +Point [5](40000	-40000	40000)0
+     +Point [6](40000	40000	40000)0
+     +Point [7](-40000	40000	40000)0
+     +Point [4](-40000	-40000	40000)0
+   -Facet # 2: OrientedPlane : Equation: -1 x + 0 y + 0 z = 40000
+     +Point [0](-40000	-40000	-40000)0
+     +Point [4](-40000	-40000	40000)0
+     +Point [7](-40000	40000	40000)0
+     +Point [3](-40000	40000	-40000)0
+     +Point [0](-40000	-40000	-40000)0
+   -Facet # 3: OrientedPlane : Equation: 1 x + 0 y + 0 z = 40000
+     +Point [1](40000	-40000	-40000)0
+     +Point [2](40000	40000	-40000)0
+     +Point [6](40000	40000	40000)0
+     +Point [5](40000	-40000	40000)0
+     +Point [1](40000	-40000	-40000)0
+   -Facet # 4: OrientedPlane : Equation: 0 x + -1 y + 0 z = 40000
+     +Point [0](-40000	-40000	-40000)0
+     +Point [1](40000	-40000	-40000)0
+     +Point [5](40000	-40000	40000)0
+     +Point [4](-40000	-40000	40000)0
+     +Point [0](-40000	-40000	-40000)0
+   -Facet # 5: OrientedPlane : Equation: 0 x + 1 y + 0 z = 40000
+     +Point [2](40000	40000	-40000)0
+     +Point [3](-40000	40000	-40000)0
+     +Point [7](-40000	40000	40000)0
+     +Point [6](40000	40000	40000)0
+     +Point [2](40000	40000	-40000)0
+======================================================
+
+======================================================
+ Loading Microstructure from xml/8/micro.xml
+------------------------------------------------------
+no precipitate found for grain # 0
+ * Grain #0
+   - origin: [ 0 , 0 , 0 ] 
+   - Rotation matrix crystallo to macro:
+0.99999999999999988898 0 0 
+0 0.99999999999999988898 0 
+0 0 0.99999999999999977796 
+Rotation matrix macro to crystallo:
+0.99999999999999988898 0 0 
+0 0.99999999999999988898 0 
+0 0 0.99999999999999977796 
+   - crystallo: HCP
+======================================================
+
+======================================================
+ Loading VTK Graph from xml/8/Test_dislocations_i1.pvtp
+                Piece : xml/8/Test_dislocations_p0_i1.vtp
+Timer : Mesh.Migrate.loadbalance Last :      27.553 ms   Total :       0.028 s
+Timer : Mesh.Migrate             Last :      66.196 ms   Total :       0.066 s
+Timer : Mesh.Clean               Last :      27.000 ms   Total :       0.027 s
+=== Start collision computation ===
+Microstructure prehandle : 0 collisions
+Timer : Collision.LoadBalance    Last :      15.598 ms   Total :       0.016 s
+Timer : Collision.MPI            Last :      22.999 ms   Total :       0.023 s
+TmpData stats:
+  r_max : 11.55 A
+  v_max : 10.00 A/timestep
+  Minimum box size : 33.09 A
+  Domain size : 80000.00 A ( 2417.52 boxes )
+  Domain decomposition tree H : 11
+  Local sphere count : 153047
+  Ghost spheres count : 1113
+  Local Morton blocks count : 35742 , 4.31 sp/block
+Timer : Collision.Prepare        Last :      85.611 ms   Total :       0.086 s
+Segments to request : 0
+              Pre-micro + Pre-segseg : Total Detected 
+Thread   0 :          0 +          0 :          0
+Thread   7 :          0 +          0 :          0
+Thread   6 :          0 +          0 :          0
+Thread   2 :          0 +          0 :          0
+Thread   4 :          0 +          0 :          0
+Thread   3 :          0 +          0 :          0
+Thread   1 :          0 +          0 :          0
+Thread   5 :          0 +          0 :          0
+Process local detected collisions :0
+Total detected collisions :0
+Timer : Collision.Detect         Last :      27.641 ms   Total :       0.028 s
+Timer : Collision.Handle         Last :       0.454 ms   Total :       0.000 s
+=== End collision computation ===
+Timer : Collision                Last :     115.386 ms   Total :       0.115 s

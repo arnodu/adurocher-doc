@@ -1,0 +1,160 @@
+[poincare052-adm:11930] MCW rank 10 bound to socket 0[core 0[hwt 0]], socket 0[core 1[hwt 0]], socket 0[core 2[hwt 0]], socket 0[core 3[hwt 0]], socket 0[core 4[hwt 0]], socket 0[core 5[hwt 0]], socket 0[core 6[hwt 0]], socket 0[core 7[hwt 0]]: [B/B/B/B/B/B/B/B][./././././././.]
+
+======================================================
+ Loading input files from xml/32/data_files.xml
+------------------------------------------------------
+save_dir's path_name : res/32
+topology's path_name : topo.xml
+microstructure's path_name : micro.xml
+inputdata's path_name : donnees.xml
+material files:
+ - material file #0 :  Zr.xml
+======================================================
+
+======================================================
+ Loading material parameters from the following files 
+------------------------------------------------------
+ * from file:xml/32/Zr.xml
+    -     => material = Zr
+======================================================
+
+======================================================
+ Loading geometric information from xml/32/topo.xml
+------------------------------------------------------
+ AbstractBlob # 0
+====================
+ Xmin = [-63496,-63496,-63496]
+ Xmax = [63496,63496,63496]
+----------------
+ Convexe edges:
+   -Edge #0 defined by [-63496,-63496,-63496,63496,-63496,-63496]
+   -Edge #1 defined by [63496,-63496,-63496,63496,63496,-63496]
+   -Edge #2 defined by [63496,63496,-63496,-63496,63496,-63496]
+   -Edge #3 defined by [-63496,63496,-63496,-63496,-63496,-63496]
+   -Edge #4 defined by [-63496,-63496,-63496,-63496,-63496,63496]
+   -Edge #5 defined by [63496,-63496,-63496,63496,-63496,63496]
+   -Edge #6 defined by [63496,63496,-63496,63496,63496,63496]
+   -Edge #7 defined by [-63496,63496,-63496,-63496,63496,63496]
+   -Edge #8 defined by [-63496,-63496,63496,63496,-63496,63496]
+   -Edge #9 defined by [63496,-63496,63496,63496,63496,63496]
+   -Edge #10 defined by [63496,63496,63496,-63496,63496,63496]
+   -Edge #11 defined by [-63496,63496,63496,-63496,-63496,63496]
+----------------
+ Concave edges:
+--------------------
+ Outershell facets:
+   -Facet # 0: OrientedPlane : Equation: 0 x + 0 y + -1 z = 63496
+     +Point [0](-63496	-63496	-63496)0
+     +Point [3](-63496	63496	-63496)0
+     +Point [2](63496	63496	-63496)0
+     +Point [1](63496	-63496	-63496)0
+     +Point [0](-63496	-63496	-63496)0
+   -Facet # 1: OrientedPlane : Equation: 0 x + 0 y + 1 z = 63496
+     +Point [4](-63496	-63496	63496)0
+     +Point [5](63496	-63496	63496)0
+     +Point [6](63496	63496	63496)0
+     +Point [7](-63496	63496	63496)0
+     +Point [4](-63496	-63496	63496)0
+   -Facet # 2: OrientedPlane : Equation: -1 x + 0 y + 0 z = 63496
+     +Point [0](-63496	-63496	-63496)0
+     +Point [4](-63496	-63496	63496)0
+     +Point [7](-63496	63496	63496)0
+     +Point [3](-63496	63496	-63496)0
+     +Point [0](-63496	-63496	-63496)0
+   -Facet # 3: OrientedPlane : Equation: 1 x + 0 y + 0 z = 63496
+     +Point [1](63496	-63496	-63496)0
+     +Point [2](63496	63496	-63496)0
+     +Point [6](63496	63496	63496)0
+     +Point [5](63496	-63496	63496)0
+     +Point [1](63496	-63496	-63496)0
+   -Facet # 4: OrientedPlane : Equation: 0 x + -1 y + 0 z = 63496
+     +Point [0](-63496	-63496	-63496)0
+     +Point [1](63496	-63496	-63496)0
+     +Point [5](63496	-63496	63496)0
+     +Point [4](-63496	-63496	63496)0
+     +Point [0](-63496	-63496	-63496)0
+   -Facet # 5: OrientedPlane : Equation: 0 x + 1 y + 0 z = 63496
+     +Point [2](63496	63496	-63496)0
+     +Point [3](-63496	63496	-63496)0
+     +Point [7](-63496	63496	63496)0
+     +Point [6](63496	63496	63496)0
+     +Point [2](63496	63496	-63496)0
+======================================================
+
+======================================================
+ Loading Microstructure from xml/32/micro.xml
+------------------------------------------------------
+no precipitate found for grain # 0
+ * Grain #0
+   - origin: [ 0 , 0 , 0 ] 
+   - Rotation matrix crystallo to macro:
+0.99999999999999988898 0 0 
+0 0.99999999999999988898 0 
+0 0 0.99999999999999977796 
+Rotation matrix macro to crystallo:
+0.99999999999999988898 0 0 
+0 0.99999999999999988898 0 
+0 0 0.99999999999999977796 
+   - crystallo: HCP
+======================================================
+
+======================================================
+ Loading VTK Graph from xml/32/Test_dislocations_i1.pvtp
+                Piece : xml/32/Test_dislocations_p0_i1.vtp
+Timer : Mesh.Migrate.loadbalance Last :     118.610 ms   Total :       0.119 s
+Timer : Mesh.Migrate             Last :     195.334 ms   Total :       0.195 s
+Timer : Mesh.Clean               Last :      33.732 ms   Total :       0.034 s
+=== Start collision computation ===
+Microstructure prehandle : 0 collisions
+Timer : Collision.LoadBalance    Last :      19.014 ms   Total :       0.019 s
+Timer : Collision.MPI            Last :      25.850 ms   Total :       0.026 s
+TmpData stats:
+  r_max : 12.37 A
+  v_max : 8.16 A/timestep
+  Minimum box size : 32.90 A
+  Domain size : 126992.00 A ( 3859.59 boxes )
+  Domain decomposition tree H : 11
+  Local sphere count : 152978
+  Ghost spheres count : 3475
+  Local Morton blocks count : 22994 , 6.80 sp/block
+Timer : Collision.Prepare        Last :      87.218 ms   Total :       0.087 s
+Segments to request : 2
+              Pre-micro + Pre-segseg : Total Detected 
+Thread   3 :          0 +          0 :          0
+Thread   1 :          0 +          0 :          0
+Thread   4 :          0 +          0 :          0
+Thread   2 :          0 +          2 :          0
+Thread   5 :          0 +          0 :          0
+Thread   6 :          0 +          0 :          0
+Thread   7 :          0 +          0 :          0
+Thread   0 :          0 +          0 :          0
+Process local detected collisions :0
+Total detected collisions :2
+Timer : Collision.Detect         Last :      25.093 ms   Total :       0.025 s
+Seg-seg collision :
+    {12,42284} <--{12,42265}--> {12,42285}
+    {12,42195} <--{12,42171}--> {12,42222}
+    --- Result ---
+    {12,42284} <--{12,76490}--> ((({12,76494}))) <--{12,76490}--> {12,42285}
+    {12,42195} <--{12,76492}--> ((({12,76494}))) <--{12,76492}--> {12,42222}
+  Recompute collisions
+    collision count (begin) : 1
+    new_sp size : 8
+    Segments to request : 0
+    Pre-select : 0 , Detected (local/total) : 0/0
+    collision count (end) : 1
+Seg-seg collision :
+    {12,42224} <--{12,42175}--> {12,42225}
+    {12,42287} <--{12,42269}--> {12,42212}
+    --- Result ---
+    {12,42224} <--{12,76494}--> ((({12,76495}))) <--{12,76494}--> {12,42225}
+    {12,42287} <--{12,76496}--> ((({12,76495}))) <--{12,76496}--> {12,42212}
+  Recompute collisions
+    collision count (begin) : 0
+    new_sp size : 16
+    Segments to request : 0
+    Pre-select : 0 , Detected (local/total) : 0/0
+    collision count (end) : 0
+Timer : Collision.Handle         Last :      12.655 ms   Total :       0.013 s
+=== End collision computation ===
+Timer : Collision                Last :     126.145 ms   Total :       0.126 s
