@@ -10,7 +10,7 @@ submit_batch(){
     sed "s/<NB_NODES>/"${n_nodes}"/" batch.sh | sed "s/<NB_PROC>/"${n_proc}"/" | sed "s/<PB_SIZE>/"${size}"/" | sed "s/<TREE_H>/"${tree_h}"/" | llsubmit -
 } 
 
-for tree_h in 6 7 8
+for tree_h in 8 9 10
 do
     submit_batch 1 1 1 $tree_h
     submit_batch 1 1 $strong_size $tree_h

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root> 
-  <force model="IsotropicAnalytical" algorithm="ufmm" nearfield="iso_arsenlis" farfield_frequency="15" />
+  <force model="IsotropicAnalytical" algorithm="ufmm" nearfield="iso_arsenlis" farfield_frequency="1" />
   <discretization lmin="20" lmax="50" /> 
   <integration   nbSteps="100"    timeStep="0.00025"    class="ForwardEuler" /> 
   <ForwardEuler  adaptiveTimeStep="on"  dt_max="0.00025"/>

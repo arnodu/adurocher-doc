@@ -6,7 +6,7 @@
 #@ tasks_per_node   = 2
 #@ output           = $(job_name).$(jobid).log
 #@ error            = $(job_name).$(jobid).err
-#@ wall_clock_limit = 4:00:00
+#@ wall_clock_limit = 0:30:00
 #@ job_type         = mpich
 #@ environment      = COPY_ALL 
 #@ queue
