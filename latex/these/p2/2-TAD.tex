@@ -119,8 +119,23 @@ Les données ne sont pas répliquées sur plusieurs processus : il n'y a pas de 
 
 Le parcours des objets du réseau de dislocation peut se faire en utilisant les itérateurs NodeIterator et SegmentIterator. Certain algorithmes demandent de parcourir les objets en ayant accès à leur voisinage. Par exemple pour calculer les longueurs des segments, il faut accéder aux positions des deux nœuds en bout de segments. En mémoire distribuée, accéder au voisinage d'un objet peut nécessiter des communications. Plusieurs algorithmes de parcours ont été implémentés hors de la structure de données.
 
-\begin{figure}
-	\includegraphics[width=\textwidth]{img/parcours_mesh}
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includetikz[0.7]{img/parcours_mesh_nodes}
+		\caption{Nœuds seuls}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includetikz[0.7]{img/parcours_mesh_nodewsegs}
+		\caption{\centering Nœuds avec segments connectés}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includetikz[0.7]{img/parcours_mesh_segwnodes}
+		\caption{\centering Segments avec nœuds connectés}
+	\end{subfigure}
 	\caption{Accès aux données lors des parcours du réseau de dislocations}
 	\label{fig:parcours_mesh}
 \end{figure}

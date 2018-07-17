@@ -141,15 +141,29 @@ Une première étape détermine les intervalles optimaux un utilisant un algorit
 \begin{equation}
     k_i=\frac{i \cdot size}{nb_{procs}}
 \end{equation}
-L'algorithme de sélection utilisé est pour l'instant un algorithme séquentiel où la liste des indices de morton est regroupée sur un seul processus qui trie et sélectionne le $k_i^{eme}$ élément. Cet algorithme pose des problèmes de scalabilité mais peut être remplacé par l'algorithme de k-sélection parallèle décrit dans \footnote{Fast Sorting on a Distributed-Memory Architecture - Cheng, Shah}.
+
+Deux algorithmes de sélection ont été testés pour déterminer ces intervalles : 
+\begin{itemize}
+	\item Un algorithme séquentiel : la lise des indices de Morton est rassemblée sur un unique processus qui se chargera de les trier, et de sélectionner les $k_i$;
+	\item Un algorithme parallèle : Chaque processus trie sa liste d'indices de Morton et communique avec les autres pour déterminer les $k_i$ sur le modèle de  \footnote{Fast Sorting on a Distributed-Memory Architecture - Cheng, Shah}. 
+\end{itemize}
 
 La seconde étape consiste en une migration des objets vers les nouveaux intervalles détaillé en section \ref{sec:migration}.
 
 \subsubsection{Migration}
 
-Après avoir déplacé les objets dans la phase d'intégration ou après avoir modifié les intervalles de décomposition de domaine dans la phase de load balancing, certains objets peuvent se trouver dans des boites qui appartiennent à un autre processus MPI. La phase de migration déplace les objets vers les bon processus MPI. 
+Après avoir déplacé les objets dans la phase d'intégration ou après avoir modifié les intervalles de décomposition de domaine dans la phase de load balancing, certains objets peuvent se trouver dans des boites qui appartiennent à un autre processus MPI. La phase de migration déplace les objets vers les bons processus MPI. 
 
-La migration est implémentée en utilisant les opérations collectives d'ajout et de suppression des nœuds et des segments. On supprime les nœuds et les segments qui ne sont pas sur les bons processus, puis on les réinsère en utilisant l'opération collective d'insertion. Cette solution n'est pas optimale car pour insérer les objets avec les opérations collectives d'insertion, tous les processus doivent avoir connaissance de l'objet à insérer. En pratique il y a peu d'échanges d'objets entre processus lors de la phase de migration entre les itérations.
+La migration contourne l'interface d'insertion/suppression évoquée en section \ref{} pour des raisons de performances. L'implémentation de cet algorithme doit donc mettre à jour les informations internes de la structure de données qui sont normalement maintenues en cohérence par les opérations collectives d'ajout/suppression.
+
+La migration se déroule en plusieurs phases:
+\begin{itemize}
+	\item Un parcours sur les objets est effectué pour déterminer quels objets doivent être déplacés sur quels domaines. Les objets à déplacer sont supprimés des listes locales.
+	\item Les processus échangent les objets (alltoall)
+	\item Les objets reçus sont insérés dans ls listes locales.
+	\item Les informations internes à la structure de données, comme la topologie, sont mises à jour. Par exemple, les indices des segments connectés aux nœuds sont mis à jour avec les nouveaux indices des segments déplacés.
+\end{itemize}
+
 
 \subsubsection{Parcours}
 
@@ -165,7 +179,38 @@ Parmi les améliorations possibles des communications MPI :
 
 \subsubsection{Nettoyage}
 
-\todo[inline]{Nettoyage datastructure}
+La structure de données doit être nettoyée périodiquement afin d'éviter la fragmentation mémoire, comme l'évoque la section \ref{sec:fragmentation_memoire}. Ce nettoyage à pour but de remplir les "trous" dans la structure de données. 
+
+Comme pour la migration, le nettoyage de la structure de données contourne l'interface d'ajout/suppression des objets, il faut donc faire attention à maintenir en cohérence les informations internes à la structure.
+
+La solution choisie consiste en un tri des objets selon leur indice de Morton et supprimant les objets invalidés. Cette solution permet de maintenir la cohérence spatiale des objets en plus de supprimer les "trous" dans la structure. Le tri s'effectue en deux étapes comme le montre la figure \ref{fig:nettoyage_tri}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+\begin{itemize}
+	\item \circled{1} Une permutation est générée en triant les indices de Morton;
+	\item \circled{2} tous les objets sont copiés dans une nouvelle liste triée en utilisant la permutation.
+\end{itemize}
+Cela permet de séparer l'étape de tri en $O(nlog(n))$ de l'étape de copie des objets qui peut bénéficier de certaines optimisations et du parallélisme.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{img/nettoyage_tri}
+	\caption{Tri des objets lors de la défragmentation}
+	\label{fig:nettoyage_tri}
+\end{figure}
+
+La permutation est générée en utilisant \verb|std::sort()| sur un tableau $\sigma$ contenant des paires $\{morton, indice\}$. $\sigma$ est initialisé par en utilisant l'indice de morton du $i_{ème}$ objet, et la position courante de l'objet : 
+
+\begin{equation}
+\sigma_i \leftarrow \{m_i, i\}
+\end{equation}
+
+Pour les objets supprimés, on utilise $+\infty$ comme indice de Morton, de manière à ce que les objets supprimés soient déplacés en fin de tableau. Une fois le tableau $\sigma$ trié selon les indices de Morton, l'indice contenu dans chaque paire donne la permutation $\sigma(i)$ qu'il faut appliquer pour que les objets soient triés. Il ne reste plus qu'à les copier dans une nouvelle liste en respectant cette permutation :
+
+\begin{equation}
+new\_objects[i] \leftarrow old\_objects[\sigma(i)]
+\end{equation}
+
+
 
 
 \subsection{Multithreading avec OpenMP}
