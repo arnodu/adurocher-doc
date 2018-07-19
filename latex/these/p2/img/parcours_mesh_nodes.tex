@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{mathptmx}
+\usepackage{tikz}
+
+\begin{document}
+	
+	\begin{tikzpicture}[scale=0.5]
+	\tikzstyle{segment}=[Gray]
+	\tikzstyle{physicalnode}=[circle,Gray,draw]
+	\tikzstyle{R}=[solid,black,double]
+	\tikzstyle{RW}=[solid,black,line width=0.5mm,fill]
+	
+	\node[physicalnode] (N1) at(-4,0) {}; 
+	\node[physicalnode,RW] (J) at(0,0) {};
+	\node[physicalnode] (N2) at(3,3) {};
+	\node[physicalnode] (N3) at(3,-3) {};
+	
+	\draw[segment] (-5,0) -- (N1);
+	\draw[segment] (N2) -- (4,3);
+	\draw[segment] (N3) -- (4,-3);
+	\draw[segment] (N1) -- (J);
+	\draw[segment] (N2) -- (J);
+	\draw[segment] (N3) -- (J);
+
+\end{tikzpicture}
+
+\end{document}
