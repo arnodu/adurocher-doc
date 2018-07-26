@@ -1,0 +1,11 @@
+stages:
+    - build
+
+build:these:
+    stage: build
+    script:
+    - cd latex/these/main
+    - pdflatex -shell-escape main.tex
+    artifacts:
+        paths:
+        - latex/these/main/main.pdf
