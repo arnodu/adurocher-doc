@@ -40,6 +40,7 @@ La mesure est effectuée sur les parcours présentés en section \ref{sec:parcou
 \end{itemize}
 
 \subsubsection{Données}
+\label{sec:bench_mesh_donnees}
 
 Les données à parcourir sont générées en fonction de la taille demandée. Le réseau de dislocations généré se compose de $S/4$ boucles carrées uniformément réparties et composées de 4 segments, comme illustré dans la figure \ref{fig:testcase-bench-mesh}. La taille des boucles est modifiée en fonction du nombre de segments pour maintenir une densité de dislocations constante.
 
@@ -61,7 +62,16 @@ Les données à parcourir sont générées en fonction de la taille demandée. L
 	\label{fig:testcase-bench-mesh}
 \end{figure}
 
-Pour le parcours témoin 'Stream', des tableaux de vecteurs à 3 dimensions de taille $S$ sont générés.
+ La taille des segments est adaptée de manière à ce que la densité $D$ soit constante. La densité choisie est de $\unit{5\cdot10^{14}}{\meter \per \meter \cubed}$. Tous les segments ont la même longueur $L$ qui peut être déterminée comme suit selon la densité et le nombre de segments $N$ souhaité:
+
+\begin{align}
+D & = \frac{\sum_{s}{} L_s}{\text{V}} = Cst \\
+L & = \frac{ D\times V }{N}
+\end{align}
+
+
+
+Pour le parcours témoin 'Stream', des tableaux de flottants double précision de taille $3 S$ sont alloués pour imiter des tableaux de taille $S$ a valeurs vectorielles. Les tableaux sont parcourus linéairement.
 
 \subsubsection{Opérations effectuées pour chaque objet}
 
@@ -150,7 +160,7 @@ La machine utilisée pour effectuer les mesures est le cluster de la Maison de l
 La performance maximale d'un nœud de la machine Poincare est résumée dans les roofline models de la figure \ref{fig:roofline_poincare}. 
 
 \begin{figure}
-	\includegraphics[width=\textwidth]{img/bench_mesh_roofline_limits}
+	\includegraphics[width=\textwidth]{img/bench_mesh_roofline}
 	\caption{Performances de référence de la machine Poincare (Roofline)}
 	\label{fig:roofline_poincare}
 \end{figure}
@@ -263,7 +273,7 @@ Il est alors possible de les placer sur un roofline, comme le montre la figure \
 \begin{figure}
     \centering
     \includegraphics[width=.4\textwidth]{img/bench_mesh_roofline_algos.pdf}
-    \caption{Roofline model pour un noeud NUMA de Poincare avec les intensités arithmétiques des algorithmes pris en exemple. }
+    \caption{ Placement intensités arithmétiques des algorithmes d'optidis sur un roofline model (1 Nœud NUMA) }
     \label{fig:roofline_algos}
 \end{figure}
 
@@ -318,13 +328,103 @@ La figure \ref{fig:bench_mesh_effet_threads} compare la performance des parcours
 
 L'ajout d'un second noeud NUMA pour le parcours devrait permettre de doubler la bande passante utile, comme on peut l'observer dans une certaine mesure pour le parcours de référence. Cependant, pour les faibles intensités arithmétiques, les parcours de la structure de données ne bénéficient pas de l'ajout d'un 2eme nœud NUMA. Les mesures de bande passantes donnent des chiffres comparables que l'on utilise 1 ou 2 nœuds NUMA pour effectuer le parcours de la structure. En parallélisme hybride, il vaudra mieux utiliser un noeud NUMA par processus MPI.
 
-\subsection{Environnement MPI}
+\subsection{Performance des parcours en mémoire distribuée.}
+\label{sec:bench_mesh_mpi}
 
-Dans cette section, nous verrons comment se comporte la structure de données lorsque les objets sont distribués sur plusieurs processus MPI. Les graphiques proposés représentent le temps ou l'efficacité en fonction du nombre de processus MPI. Pour chacun des graphiques présentés, certaines grandeurs sont fixées.
+Dans cette section, nous verrons comment se comporte la structure de données lorsque les objets sont distribués sur plusieurs processus MPI. Les graphiques proposés représentent le temps ou l'efficacité en fonction du nombre de processus. Pour chacun des graphiques présentés, certaines grandeurs sont fixées.
 \begin{itemize}
-    \item Les mesures sont toujours effectuées sur un nœud NUMA (8 treads), car c'est le nombre de threads le plus adapté à la structure selon la section \ref{sec:bench_mesh_impact_threads}
-    \item Le nombre d'éléments pourra être $10^5$ ou $10^6$ et sera indiqué sur chaque graphe
-    \item L'intensité arithmétique pourra 
+    \item Les mesures sont toujours effectuées sur un nœud NUMA (8 threads), car c'est le nombre de threads le plus adapté à la structure selon la section \ref{sec:bench_mesh_impact_threads}
+    \item Le nombre d'éléments pourra être $10^5$ ou $10^6$ par processus MPI et sera indiqué sur chaque graphe
+    \item L'intensité arithmétique pourra varier et sera affichée sur chaque graphe. Les intensités choisies sont proches de celles du tableau \ref{tab:perf_poincare} qui sont rencontrées dans des algorithmes d'optidis.
 \end{itemize}
 
+La scalabilité MPI des parcours de la structure est mesurée en weak scaling : la taille des données augmente avec le nombre de processus. Afin que le nombre de segments fantômes reste constant, il est important de maintenir une densité linéique de dislocations constante comme décrit en \ref{sec:bench_mesh_donnees}.
+
+\subsubsection{Comportement général}
+
+Toutes les mesures effectuées sont consultables dans l'annexe \ref{annexe:bench_mesh}.
+
+Les graphiques de la figure \ref{fig:bench_mesh_mpi_comportement_general} donnent un aperçu de la performance des parcours de la structure de données dans le cas qui représente le mieux son utilisation dans optidis. L'intensité choisie de \unit{0.04}{Flops \per Octet} est représentative de l'algorithme de déplacement des nœuds par exemple, et le volume de données de $10^6$ éléments par processus MPI est représentatif de la non-réutilisation des données dans les caches au sein d'optidis.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/bench_mesh_mpi_preview.pdf}
+	\caption{Mesures de scalabilité des parcours pour $10^6$ élément par processus MPI, une intensité arithmétique de 0.04 Flops/Octet et un processus MPI par noeud NUMA (8 threads).}
+	\label{fig:bench_mesh_mpi_comportement_general}
+\end{figure}
+
+Le temps d'exécution varie peu, ce qui nous indique que les parcours de la structure de données sont efficaces dans ces conditions. L'efficacité de la plus part des parcours est proche de 100 \%, à l'exception du parcours des Nœuds avec segments connectés dont l'efficacité s'approche des 90\%.
+
+On remarque que le temps d'exécution du parcours des nœuds avec segments connectés est minimal lorsque deux processus MPI sont exécutés sur le même nœud de calcul. Nous avons donc choisi le temps d'exécution sur un nœud complet avec un processus par noeud NUMA ( 2 MPI $\times$ 8 Threads ) comme valeur de référence pour l'efficacité afin d'avoir des valeurs d'efficacité cohérentes.
+
+\subsubsection{Impact de la taille des données}
+
+
+La figure \ref{fig:bench_mesh_mpi_effet_taille} montre l'impact de la taille des données sur l'efficacité des parcours dans un environnement distribué.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/bench_mesh_mpi_effet_taille}
+	\caption{Effet de la taille des données sur la performance MPI des parcours pour une intensité de 0.04 Flops/Octet avec un processus MPI par noeud NUMA (8 threads).}
+	\label{fig:bench_mesh_mpi_effet_taille}
+\end{figure}
+
+Si les temps de parcours sont presque constants pour $10^6$ objets par processus MPI, ils augmentent lorsque le volume des données est plus réduit. Pour des données plus petites ($10^5$ objets par par processus), l'efficacité est moins bonne. Les échanges et les calculs liés à la décomposition de domaine jouent un rôle plus important lorsque les données sont plus petites.
+
+L'intensité arithmétique à un impact similaire : plus le temps de calcul est long, plus les communications jouent un rôle important dans la performance.
+
+\subsubsection{Effet des échanges MPI}
+
+Dans les figures \ref{fig:bench_mesh_mpi_effet_comm_1e+06} et \ref{fig:bench_mesh_mpi_effet_comm_1e+05}, les parcours qui nécessitent des échanges MPI ont été modifiés afin d'ajouter un cache des données fantômes. Lorsque les données ne sont pas modifiées entre les itérations, il est possible d'éviter les communications MPI en sauvegardant les valeurs liées aux objets fantômes. Cette figure compare la performance lorsque les processus effectuent des communications MPI, et lorsque les données sont gardées en cache.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/bench_mesh_mpi_effet_comm_1e+06}
+	\caption{Effet des échanges MPI sur la performance des parcours pour une taille de $10^6$ éléments par processus, un intensité de 0.04 Flops/Octet avec un processus MPI par nœud NUMA (8 threads).}
+	\label{fig:bench_mesh_mpi_effet_comm_1e+06}
+\end{figure}
+
+Lorsque les données sont suffisamment grandes (figure \ref{fig:bench_mesh_mpi_effet_comm_1e+06} ), les communications MPI ne changent pas la performance de manière significative. La courbe en pointillés indique le temps du processus le plus lent, et la courbe pleine le plus rapide. Les deux courbes sont disjointes si une différence de charge existe entre les différents processus. Cette différence s'explique par une homogénéité du nombre d'objets fantôme à traiter : les processus du bord ont moins de fantômes. On remarque que pour une taille de $10^6$ éléments par processus les échanges MPI ne font que synchroniser tous les processus sur le plus lent.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/bench_mesh_mpi_effet_comm_1e+05}
+	\caption{Effet des échanges MPI sur la performance des parcours pour une taille de $10^5$ éléments par processus, un intensité de 0.04 Flops/Octet avec un processus MPI par nœud NUMA (8 threads).}
+	\label{fig:bench_mesh_mpi_effet_comm_1e+05}
+\end{figure}
+
+Lorsque le temps de parcours est faible (figure \ref{fig:bench_mesh_mpi_effet_comm_1e+05} ), l'impact des communications est plus fort. Pour les petits volumes de données et les intensités arithmétiques faibles il serait judicieux d'utiliser un cache pour les données fantômes. Malheureusement, comme pour les caches processeur, les algorithmes réutilisent rarement les mêmes champs de la structure de données, ce qui rend l'utilisation de caches difficile voire impossible.
+
+
 \subsection{Performance des opérations topologiques}
+
+L'objectif principal de la mise en place d'un type de données abstrait pour la structure de données est d'augmenter la fiabilité des algorithmes au sein d'optidis. Certain des aspects comme les parcours ont été optimisés pour la performance, mais d'autres opérations comme les opérations de modification de la topologie nécessitent encore des optimisations afin que leur performance soit optimale dans un environnement parallèle et distribué. Cette section a pour but de faire un état des lieux de la performance de ces opérations et de proposer des pistes de réflexion pour améliorer leur performance.
+
+\subsubsection{Performances théoriques}
+
+Les opérations topologiques d'ajout et de suppression de nœuds ou de segments se font de manière collective. Tous les processus doivent participer à l'insertion de chaque objet. Les opérations topologiques collectives, à l'image des opérations MPI telles que \verb|MPI_Bcast| sont inévitablement un obstacle à la scalabilité. Malgré les efforts mis en place pour éviter au maximum les communications pour ces opérations \ref{sec:optimisation_operations topologiques}, le temps nécéssaire à l'ajout ou à la suppression d'objet au réseau est linéaire en fonction du nombre d'objets à ajouter quel que soit le nombre de processus MPI utilisés : ces opérations sont séquentialités Avec $N$ le nombre d'objets à insérer/supprimer et $P$ le nombre de processus MPI, le temps nécessaire à effectuer les opérations topologiques est:
+
+\begin{equation}
+	T_{insertion}(N,P) = T_{suppression}(N,P) = O(N)
+\end{equation}
+
+\subsubsection{Mesure des performances d'insertion}
+
+Afin d'illustrer la performance des opérations topologiques dans la structure de données, nous avons mesuré le temps nécessaire à l'insertion des objets lors de la construction du réseau de dislocation pour le benchmark des parcours. La figure \ref{fig:bench_mesh_insertion} donne la vitesse d'insertion des objets en fonction du nombre de processus MPI. Chaque point du graphe est déduit de la mesure du temps nécessaire pour construire le réseau de dislocations utilisé pour les graphiques de scalabilité présentés en section \ref{sec:bench_mesh_mpi}, et dont la structure est décrite en section \ref{sec:bench_mesh_donnees}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.4\textwidth]{img/bench_mesh_insertion}
+	\caption{Vitesse d'insertion dans la structure de données au cours de la préparation du benchmark des parcours.}
+	\label{fig:bench_mesh_insertion}
+\end{figure}
+
+Après une légère augmentation, la vitesse d'insertion stagne à $\unit{4\cdot10^{6}}{Objets\per \second}$ malgré le nombre croissant de processus MPI. La linéarité du temps d'insertion est donc vérifiée.
+
+\subsubsection{Perspectives}
+
+Les performances des opérations topologiques peuvent être améliorées en développant une interface d'insertion qui ne nécessite pas d'opérations collectives. Par exemple dans notre cas, tous les processus doivent générer toutes les boucles, qu'elles soient locales ou distantes. Parmi les idées qui permettraient d'augmenter la performance des opérations topologiques :
+\begin{itemize}
+	\item Modifications topologiques transactionnelles : chaque processus effectue ses modifications et une unique opération collective est effectuée pour synchroniser les processus.
+	\item Modifications par paquets : des opérations collectives permettent d'ajouter/supprimer plusieurs objets simultanément de manière optimisée. 
+\end{itemize}

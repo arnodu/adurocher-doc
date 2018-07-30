@@ -75,6 +75,8 @@ L'ajout d'objets pose des problèmes lors de l'utilisation de \verb|std::vector|
 \end{itemize}
 En pratique, dans Optidis, pour régler ce problème, il faut utiliser \verb|std::vector::reserve()| lorsque l'on initialise le réseau de dislocations, et on utilise par la suite le cout constant amorti de l'insertion dans \verb|std::vector|. Une insertion qui déclenche une ré-allocation aura un cout important, mais ne devrait pas arriver de manière trop fréquente.
 
+Il est aussi important de faire remarquer que par défaut \verb|std::vector| ne fait qu'augmenter sa capacité sans jamais la réduire. Cela ne semble pas poser le problèmes dans le cas des dislocations qui on plutôt tendance à se multiplier qu'à s'annihiler. Il est toujours possible de résoudre les cas pathologiques en utilisant la méthode \verb|std::vector::shrink_to_fit()|.
+
 \subsubsection{Fragmentation mémoire}
 \label{sec:fragmentation_memoire}
 
@@ -96,6 +98,7 @@ La troisième solution (Figure \ref{fig:fragmentation_memoire}c) consiste à rem
 		\label{fig:fragmentation_memoire}
 \end{figure}
 
+La solution choisie est la première solution présentée pour des raisons de simplicité, car l'objectif premier de cette implémentation est d'améliorer la fiabilité du simulateur.
 
 \subsection{Données distribuées avec MPI}
 
@@ -124,7 +127,7 @@ Pour distribuer les objets sur les processus MPI, on utilise les règles suivant
     o \in P_i \Leftrightarrow \mathcal{M}(o) \in I_{P_i}
 \end{equation}
 
-Pour que la décomposition de domaine soit compatible avec ScalFMM, il faut s'assurer que toutes les particules d'une feuille de l'octree FMM se trouvent sur le même processus MPI. La décomposition de domaine doit se faire selon les boites d'un octree d'une hauteur inférieure à l'arbre utilisé pour le calcul FMM, comme l'illustre la figure \ref{fig:domaindecomposition_smaller_octree}a, sinon certaines boites FMM seront éclatées sur plusieurs processus, comme dans la figure \ref{fig:domaindecomposition_smaller_octree}b.
+Pour que la décomposition de domaine soit compatible avec ScalFMM, il faut s'assurer que toutes les particules d'une feuille de l'octree FMM se trouvent sur le même processus MPI. La décomposition de domaine doit se faire selon les boites d'un octree d'une hauteur inférieure à l'arbre utilisé pour le calcul FMM, comme l'illustre la figure \ref{fig:domaindecomposition_smaller_octree}a, sinon certaines boites FMM seront éclatées sur plusieurs processus (ce que ScalFMM ne permet pas), comme dans la figure \ref{fig:domaindecomposition_smaller_octree}b.
 
 \begin{figure}[]
 \centering
@@ -150,20 +153,26 @@ Deux algorithmes de sélection ont été testés pour déterminer ces intervalle
 
 La seconde étape consiste en une migration des objets vers les nouveaux intervalles détaillé en section \ref{sec:migration}.
 
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
 \subsubsection{Migration}
 
 Après avoir déplacé les objets dans la phase d'intégration ou après avoir modifié les intervalles de décomposition de domaine dans la phase de load balancing, certains objets peuvent se trouver dans des boites qui appartiennent à un autre processus MPI. La phase de migration déplace les objets vers les bons processus MPI. 
 
 La migration contourne l'interface d'insertion/suppression évoquée en section \ref{} pour des raisons de performances. L'implémentation de cet algorithme doit donc mettre à jour les informations internes de la structure de données qui sont normalement maintenues en cohérence par les opérations collectives d'ajout/suppression.
 
-La migration se déroule en plusieurs phases:
+La migration se déroule en plusieurs phases illustrées en figure \ref{fig:migration}:
 \begin{itemize}
-	\item Un parcours sur les objets est effectué pour déterminer quels objets doivent être déplacés sur quels domaines. Les objets à déplacer sont supprimés des listes locales.
-	\item Les processus échangent les objets (alltoall)
-	\item Les objets reçus sont insérés dans ls listes locales.
-	\item Les informations internes à la structure de données, comme la topologie, sont mises à jour. Par exemple, les indices des segments connectés aux nœuds sont mis à jour avec les nouveaux indices des segments déplacés.
+	\item \circled{1} Un parcours sur les objets est effectué pour déterminer quels objets doivent être déplacés sur quels domaines. Les objets à déplacer sont supprimés des listes locales.
+	\item \circled{2} Les processus échangent les objets (alltoall) et les objets reçus sont insérés dans ls listes locales.
+	\item \circled{3} Les informations internes à la structure de données, comme la topologie, sont mises à jour. Par exemple, les indices des segments connectés aux nœuds sont mis à jour avec les nouveaux indices des segments déplacés.
 \end{itemize}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textheight]{img/migration}
+	\caption{Migration des objets}
+	\label{fig:migration}
+\end{figure}
 
 \subsubsection{Parcours}
 
@@ -184,7 +193,7 @@ La structure de données doit être nettoyée périodiquement afin d'éviter la 
 Comme pour la migration, le nettoyage de la structure de données contourne l'interface d'ajout/suppression des objets, il faut donc faire attention à maintenir en cohérence les informations internes à la structure.
 
 La solution choisie consiste en un tri des objets selon leur indice de Morton et supprimant les objets invalidés. Cette solution permet de maintenir la cohérence spatiale des objets en plus de supprimer les "trous" dans la structure. Le tri s'effectue en deux étapes comme le montre la figure \ref{fig:nettoyage_tri}
-\newcommand*\circled[1]{\tikz[baseline=(char.base)]{ \node[shape=circle,draw,inner sep=1pt] (char) {#1};} }
+
 \begin{itemize}
 	\item \circled{1} Une permutation est générée en triant les indices de Morton;
 	\item \circled{2} tous les objets sont copiés dans une nouvelle liste triée en utilisant la permutation.

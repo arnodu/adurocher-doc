@@ -148,13 +148,13 @@ Les schémas d'accès aux données des différents parcours sont illustrés dans
 Une fonction permet d'itérer sur les nœuds. Elle est équivalente à l'utilisation des itérateurs, mais son implémentation peut être différente et donc plus performante. Son prototype est le suivant : 
 
 \begin{minted}{cpp}
-	void fastIterate_nodes(Mesh& m, Function f);
+	void fastIterate_nodes( Mesh& m, const Function& f );
 \end{minted}
 
 avec f une fonction de prototype
 
 \begin{minted}{cpp}
-	void f( Mesh::NodeInfo_ref& n);
+	void f( const Mesh::NodeInfo_ref n );
 \end{minted}
 
 Pour chaque nœud du réseau, on applique la fonction f qui applique une transformation avec un accès aux données comme illustré en figure \ref{fig:parcours_mesh}a.
@@ -164,29 +164,29 @@ Pour chaque nœud du réseau, on applique la fonction f qui applique une transfo
 Une fonction permet le parcours des nœuds avec connaissance des segment connectés.  Son prototype est le suivant:
 
 \begin{minted}{cpp}
-    void fastIterate_nodes_withSegments(Mesh& m, Function f);
+    void fastIterate_nodes_withSegments( Mesh& m, const Function& f );
 \end{minted}
 Avec f une fonction de prototype.
 \begin{minted}{cpp}
-    void f( Mesh::NodeInfo_ref& n, 
-            const std::vector<MeshHelper::Connexion>& connexions);
+    void f( Mesh::NodeInfo_ref n, 
+    		const Mesh::SegmentInfo_ref connexions[], 
+    		size_t nb_connexions);
 \end{minted}
 
-\todo[inline]{Détailler MeshHelper::Connexion}
-
-\verb|MeshHelper::Connexion| est une structure qui contient les informations sur un segment connecté au nœud n. f peut accéder aux données du noeud en lecture/ecriture, et aux segments en lecture seule, comme illustré sans la figure \ref{fig:parcours_mesh}b.
+Pour chaque nœud du réseau, on applique la fonction f qui effectue une transformation au nœud n. f peut accéder aux données du nœud en lecture/écriture, et aux segments en lecture seule, comme illustré sans la figure \ref{fig:parcours_mesh}b.
 
 \subsubsection{Itération sur les segments avec nœuds connectés}
 
 Une fonction permet le parcours des segments avec les nœuds connectés. Son prototype est le suivant:
 
 \begin{minted}{cpp}
-    void fastIterate_segments([const] Mesh& m, Function f);
+    void fastIterate_segments( Mesh& m, const Function& f );
 \end{minted}
 Avec f une fonction de prototype.
 \begin{minted}{cpp}
-    void f( [const] Mesh::SegmentInfo_ref& s_info, 
-             const  Mesh::NodeInfo& n1_info, const Mesh::NodeInfo& n2_info);
+    void f( const Mesh::SegmentInfo_ref s_info,
+    		const Mesh::NodeInfo_ref& n1_info, 
+    		const Mesh::NodeInfo_ref& n2_info );
 \end{minted}
 
 Pour chaque segment du réseau, on applique f qui a accès au segment courant en lecture/écriture et aux nœuds connectés en lecture seule, comme illustré dans la figure \ref{fig:parcours_mesh}c. Il existe aussi une version qui ne modifie pas le réseau, qui prend un \verb|const Mesh&|.
